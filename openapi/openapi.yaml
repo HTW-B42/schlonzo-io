@@ -1,0 +1,166 @@
+openapi: 3.0.3
+
+info:
+  title: auth-api
+  description: auth-api
+  version: 1.0.0
+
+servers:
+  - url: 'http://localhost:4711/v1'
+
+paths:
+
+  /auth:
+    get:
+      summary: Authenticate using user and password
+      description: >
+        BasicAuth operation, returning a session token (JWT)
+        for environment binding [like this](https://www.baeldung.com/openapi-jwt-authentication).
+      parameters:
+        - $ref: "#/components/schemas/BasicAuth"
+      responses:
+        '200':
+          description: authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionToken"
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /users/register:
+    post:
+      summary: register a new user
+      parameters:
+        - $ref: "#/components/schemas/RegisterUser"
+      responses:
+        '200':
+          description: user registered
+        '400':
+          description: user could not be registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /users/logout:
+    get:
+      summary: logout
+      responses:
+        '200':
+          description: logged out
+        '500':
+          description: server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+
+  responses:
+
+    ### AUTH ###
+    AuthSuccess:
+      $ref: "#/components/schemas/AuthSuccess"
+
+
+
+  schemas:
+    Error:
+      type: string
+      example: "unkown error"
+
+    ## AUTH ###
+    AuthSuccess:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SessionToken"
+        - $ref: "#/components/schemas/User"
+          required:
+            - id
+            - name
+            - user_confirmed
+
+    SessionToken:
+      type: string
+      example: "8763t4bc87zfgc2873rzu2873r6th2e8t2g982r73tzrhxs87u76trbg8765rg7654r7g65trg8h765tfrv5vr86dfb739c78623987dz"
+
+    BasicAuth:
+      description: base64 encoded string containing username:hashed-password
+      type: string
+      example: "bhgtuMGdut7ugr657rFDvc765r/5rgbhNzgFVRT+Fzs="
+
+    ### USER ###
+    UserName:
+      type: string
+
+    UserConfirmed:
+      type: boolean
+
+    RegisterUser:
+      type: object
+      properties:
+        name:
+          $ref: "#/components/schemas/UserName"
+        email:
+          type: string
+        hashed-password:
+          type: string
+      required:
+        - name
+        - email
+        - hashed-password
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          $ref: "#/components/schemas/UserName"
+        user_confirmed:
+          $ref: "#/components/schemas/UserConfirmed"
+      required:
+        - id
+
+#    UserUpdate:
+#      description: contains any of the following updatable properties
+#      allOf:
+#        - $ref: "#/components/schemas/User"
+#          type: object
+#          properties:
+#            UserName:
+#              $ref: "#/components/schemas/UserName"
+#            UserConfirmed:
+#              $ref: "#/components/schemas/UserConfirmed"
+#
+#    UserScoreUpdate:
+#      description: contains any of the following updatable properties
+#      type: object
+#      anyOf:
+#        - $ref: "#/components/schemas/User"
+#        - $ref: "#/components/schemas/UserUpdate"
+#
+#  securitySchemes:
+#    session_token:
+#      type: apiKey
+#      description: session token to authorize requests.
+#      name: SessionToken
+#      $ref: "#/components/schemas/SessionToken"
+#      in: query
+#    basic_auth:
+#      type: http
+#      scheme: basic
+#      description: Use `user` / `passwd` as the test credentials
+#
+#security:
+#  - session_token: []
+#  - OAuth2:
+#      - read
+#      - write4
