@@ -29,7 +29,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SessionToken"
+                allOf:
+                  - $ref: "#/components/schemas/SessionToken"
+                  - $ref: "#/components/schemas/User"
         '401':
           description: not authorized
           content:
@@ -66,7 +68,7 @@ paths:
         - in: path
           name: username
           schema:
-            type: string
+            $ref: "#/components/schemas/UserName"
           required: true
       responses:
         '200':
@@ -166,12 +168,6 @@ paths:
 
 components:
 
-  responses:
-
-    ### AUTH ###
-    AuthSuccess:
-      $ref: "#/components/schemas/AuthSuccess"
-
   schemas:
 
     Error:
@@ -179,16 +175,6 @@ components:
       example: "unkown error"
 
     ## AUTH ###
-    AuthSuccess:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/SessionToken"
-        - $ref: "#/components/schemas/User"
-          required:
-            - id
-            - name
-            - user_confirmed
-
     SessionToken:
       type: string
       example: "8763t4bc87zfgc2873rzu2873r6th2e8t2g982r73tzrhxs87u76trbg8765rg7654r7g65trg8h765tfrv5vr86dfb739c78623987dz"
