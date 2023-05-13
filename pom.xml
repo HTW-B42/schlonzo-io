@@ -86,9 +86,11 @@
               <apiPackage>org.htw.quizgame.api</apiPackage>
               <modelPackage>org.htw.quizgame.api.model</modelPackage>
               <configOptions>
-                <generateSupportingFiles>false</generateSupportingFiles>
                 <sourceFolder>src/gen/java/main</sourceFolder>
+                <skipDefaultInterface>true</skipDefaultInterface>
+                <generateSupportingFiles>false</generateSupportingFiles>
                 <interfaceOnly>true</interfaceOnly>
+                <fullJavaUtil>true</fullJavaUtil>
               </configOptions>
             </configuration>
           </execution>

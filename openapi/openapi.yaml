@@ -1,37 +1,30 @@
 openapi: 3.0.3
 
 info:
-  title: auth-api
-  description: auth-api
+  title: game-api
+  description: the game-api
   version: 1.0.0
 
 servers:
-  - url: 'http://localhost:4711/v1'
+  - url: 'http://localhost:4711/'
 
 paths:
   /auth:
-    get:
-      summary: Authenticate using user and password
-      description: >
-        BasicAuth operation, returning a session token (JWT)
-        for environment binding [like this](https://www.baeldung.com/openapi-jwt-authentication).
-      parameters:
-        - in: query
-          name: BasicAuth
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BasicAuth"
+    post:
+      summary: authenticate using user name and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BasicAuth"
       responses:
         '200':
           description: authenticated
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/SessionToken"
-                  - $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/AuthSuccess"
         '401':
           description: not authorized
           content:
@@ -39,45 +32,41 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /users/register:
+  /user/name/test:
+    post:
+      summary: test if username is available
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserName"
+      responses:
+        '200':
+          description: username available
+        '444':
+          description: username not available
+
+  /user/register:
     post:
       summary: register a new user
-      parameters:
-        - in: query
-          name: newUser
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RegisterUser"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUser"
       responses:
         '200':
           description: user registered
-        '400':
+        '500':
           description: user could not be registered
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
 
-
-  /users/register/{username}:
-    get:
-      summary: test available username
-      parameters:
-        - in: path
-          name: username
-          schema:
-            $ref: "#/components/schemas/UserName"
-          required: true
-      responses:
-        '200':
-          description: username available
-        '500':
-          description: username not available
-
-
-  /users/logout:
+  /user/logout:
     get:
       summary: logout
       responses:
@@ -92,7 +81,7 @@ paths:
 
   /game/start:
     get:
-      summary: starts a game and get game lobby
+      summary: starts a game and returns game lobby object
       responses:
         '200':
           description: ok
@@ -100,14 +89,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameSession"
-        '500':
-          description: not ok
+        '401':
+          description: not authorized
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        '401':
-          description: not authorized
+        '500':
+          description: server error
           content:
             application/json:
               schema:
@@ -123,29 +112,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Question"
-        '500':
-          description: not ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         '401':
           description: not authorized
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
-    post:
-      summary: send question answer
-      parameters:
-        - in: query
-          name: userAnswer
-          required: true
+        '500':
+          description: server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserQuestionAnswer"
+                $ref: "#/components/schemas/Error"
+
+    post:
+      summary: tell the server if the question was answered correctly
+      parameters:
+        - in: query
+          name: user_answered_correctly
+          required: true
+          schema:
+            type: boolean
       responses:
         '200':
           description: ok
@@ -153,72 +140,123 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameSession"
-        '500':
-          description: not ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         '401':
           description: not authorized
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        '500':
+          description: server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
-
   schemas:
-
     Error:
-      type: string
-      example: "unkown error"
+      type: object
+      required:
+        - error_msg
+      properties:
+        error_msg:
+          type: string
+          example: "unkown error"
 
     ## AUTH ###
-    SessionToken:
-      type: string
-      example: "8763t4bc87zfgc2873rzu2873r6th2e8t2g982r73tzrhxs87u76trbg8765rg7654r7g65trg8h765tfrv5vr86dfb739c78623987dz"
+    AuthSuccess:
+      type: object
+      description: object containing a session token and a user object
+      required:
+        - session_token
+        - user
+      properties:
+        session_token:
+          description: >
+            session token unique to a users session, 
+            invalidates with logout or specified time without activity
+          type: string
+          example: "8763t4bc87zfgc2873rzu2873r6th2e8t2g982r73tzrhxs87u76trbg8765rg76"
+        user:
+          $ref: "#/components/schemas/User"
 
     BasicAuth:
-      description: base64 encoded string containing username:hashed-password
-      type: string
-      example: "bhgtuMGdut7ugr657rFDvc765r/5rgbhNzgFVRT+Fzs="
+      type: object
+      required:
+        - auth_string
+      properties:
+        auth_string:
+          description: base64 encoded string containing username:hashed_password
+          type: string
+          format: byte
+          example: "bhgtuMGdut7ugr657rFDvc765r/5rgbhNzgFVRT+Fzs="
 
     ### USER ###
-    UserName:
-      type: string
+    BaseUser:
+      type: object
+      properties:
+        user_name:
+          description: the users login and user name
+          type: string
+          pattern: '^(?=.{8,22}$)(?![_])(?!.*[_]{2})[a-zA-Z0-9_]+(?<![_])$'
+          example: "Real_Friedrich_Schmerz"
+        user_email:
+          description: the users email address
+          type: string
+          pattern: '^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'
+          format: email
+          example: "RealFriedrichSchmerz@cdu.biz"
 
-    UserConfirmed:
-      type: boolean
+    UserName:
+      type: object
+      required:
+        - user_name
+      allOf:
+        - $ref: "#/components/schemas/BaseUser"
 
     RegisterUser:
       type: object
-      properties:
-        name:
-          $ref: "#/components/schemas/UserName"
-        email:
-          type: string
-        hashed-password:
-          type: string
       required:
-        - name
-        - email
+        - user_name
+        - user_email
         - hashed-password
+      allOf:
+        - $ref: "#/components/schemas/BaseUser"
+      properties:
+        hashed-password:
+          description: hashed user password
+          type: string
+          format: byte
 
     User:
       type: object
-      properties:
-        id:
-          type: string
-        name:
-          $ref: "#/components/schemas/UserName"
-        user_confirmed:
-          $ref: "#/components/schemas/UserConfirmed"
       required:
-        - id
+        - user_name
+        - user_email
+        - user_id
+        - user_confirmed
+      allOf:
+        - $ref: "#/components/schemas/BaseUser"
+      properties:
+        user_id:
+          description: a unique id for the user
+          type: string
+          format: uuid
+          example: "dfu90j39tj3497uiopoetrgu3984"
+        user_confirmed:
+          description: has the user confirmed his email address?
+          type: boolean
+          example: false
 
     GameSession:
       type: object
+      description: a game session object, maybe the same as lobby?
+      required:
+        - gameID
+        - gameOver
+        - lobbyMembers
+        - scoreboard
       properties:
         gameID:
           type: string
@@ -233,17 +271,29 @@ components:
         gameOver:
           type: boolean
 
-
     UserScore:
       type: object
+      description: a user score object
+      required:
+        - user_id
+        - user_score
       properties:
-        user:
-          $ref: "#/components/schemas/User"
-        score:
-          type: integer
+        user_id:
+          type: string
+          format: uuid
+        user_score:
+          type: number
+          minimum: 0
 
     Question:
       type: object
+      description: >
+        object containing a question, 
+        the answer choices as well as the correct answer
+      required:
+        - question
+        - answerChoices
+        - correctAnswer
       properties:
         question:
           type: string
@@ -253,10 +303,7 @@ components:
             type: string
             # TODO LETS TEST IT OUT
         correctAnswer:
-          type: integer
-
-    UserQuestionAnswer:
-      type: boolean
+          type: string
 
 
 
