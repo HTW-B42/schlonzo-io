@@ -4,11 +4,21 @@ import org.htw.quizgame.api.UserApi;
 import org.htw.quizgame.api.model.RegisterUserDTO;
 import org.htw.quizgame.api.model.UserDTO;
 import org.htw.quizgame.api.model.UserNameDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController implements UserApi {
+
+
+    private final UserDTO exampleUser;
+
+    @Autowired
+    public UserController(UserDTO exampleUser){
+        this.exampleUser = exampleUser;
+    }
+
     @Override
     public ResponseEntity<Void> userLogoutGet() {
         return ResponseEntity.ok(null);
@@ -22,6 +32,6 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<UserDTO> userRegisterPost(RegisterUserDTO registerUserDTO) {
-        return null;
+        return ResponseEntity.ok(exampleUser);
     }
 }
