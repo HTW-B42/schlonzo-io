@@ -4,9 +4,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.htw</groupId>
-  <artifactId>quizgame</artifactId>
+  <groupId>org.htw.quizgame</groupId>
+  <artifactId>api</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <name>quizgame-api</name>
+  <description>quizgame api</description>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
@@ -85,10 +87,13 @@
               <generatorName>spring</generatorName>
               <apiPackage>org.htw.quizgame.api</apiPackage>
               <modelPackage>org.htw.quizgame.api.model</modelPackage>
+              <modelNameSuffix>DTO</modelNameSuffix>
               <configOptions>
-                <generateSupportingFiles>false</generateSupportingFiles>
                 <sourceFolder>src/gen/java/main</sourceFolder>
+                <skipDefaultInterface>true</skipDefaultInterface>
+                <generateSupportingFiles>false</generateSupportingFiles>
                 <interfaceOnly>true</interfaceOnly>
+                <fullJavaUtil>true</fullJavaUtil>
               </configOptions>
             </configuration>
           </execution>
