@@ -55,9 +55,16 @@ paths:
               $ref: "#/components/schemas/UserName"
       responses:
         '200':
-          description: username available
-        '444':
-          description: username not available
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: boolean
+
+        '500':
+          $ref: "#/components/responses/Error"
+
+
 
   /user/register:
     post:

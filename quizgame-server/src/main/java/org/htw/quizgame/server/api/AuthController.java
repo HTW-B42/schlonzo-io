@@ -1,4 +1,4 @@
-package org.htw.quizgame.server;
+package org.htw.quizgame.server.api;
 
 import static org.springframework.http.ResponseEntity.ok;
 
