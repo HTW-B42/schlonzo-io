@@ -13,7 +13,6 @@ public class InfoController implements InfoApi {
 
   private final ApiInfoDTO apiInfo;
 
-
   @Autowired
   public InfoController(ApiInfoDTO apiInfo) {
     this.apiInfo = apiInfo;
