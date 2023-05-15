@@ -6,12 +6,25 @@ info:
   version: 1.0.0
 
 servers:
-  - url: 'http://localhost:4711/'
+  - url: 'http://localhost:4711'
 
 paths:
+  /info:
+    get:
+      summary: get api info
+      security: []
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiInfo"
+
   /auth:
     post:
       summary: authenticate using user name and password
+      security: []
       requestBody:
         required: true
         content:
@@ -26,15 +39,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/AuthSuccess"
         '401':
-          description: not authorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/Unauthorized"
+        '500':
+          $ref: "#/components/responses/Error"
 
   /user/name/test:
     post:
       summary: test if username is available
+      security: []
       requestBody:
         required: true
         content:
@@ -50,6 +62,7 @@ paths:
   /user/register:
     post:
       summary: register a new user
+      security: []
       requestBody:
         required: true
         content:
@@ -59,12 +72,12 @@ paths:
       responses:
         '200':
           description: user registered
-        '500':
-          description: user could not be registered
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/User"
+        '500':
+          $ref: "#/components/responses/Error"
 
   /user/logout:
     get:
@@ -72,12 +85,10 @@ paths:
       responses:
         '200':
           description: logged out
+        '401':
+          $ref: "#/components/responses/Unauthorized"
         '500':
-          description: server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/Error"
 
   /game/start:
     get:
@@ -90,17 +101,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/GameSession"
         '401':
-          description: not authorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/Unauthorized"
         '500':
-          description: server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/Error"
 
   /game/question:
     get:
@@ -113,17 +116,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Question"
         '401':
-          description: not authorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/Unauthorized"
         '500':
-          description: server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/Error"
 
     post:
       summary: tell the server if the question was answered correctly
@@ -141,19 +136,33 @@ paths:
               schema:
                 $ref: "#/components/schemas/GameSession"
         '401':
-          description: not authorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/Unauthorized"
         '500':
-          description: server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/Error"
 
 components:
+  responses:
+    Error:
+      description: the default error response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    NotFound:
+      description: account not found or invalid authentication data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    Unauthorized:
+      description: unauthorized, session token is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
   schemas:
     Error:
       type: object
@@ -163,6 +172,15 @@ components:
         error_msg:
           type: string
           example: "unkown error"
+
+    ApiInfo:
+      type: object
+      required:
+        - info_msg
+      properties:
+        info_msg:
+          type: string
+          example: "info about me"
 
     ## AUTH ###
     AuthSuccess:
@@ -189,8 +207,8 @@ components:
         auth_string:
           description: base64 encoded string containing username:hashed_password
           type: string
-          format: byte
-          example: "bhgtuMGdut7ugr657rFDvc765r/5rgbhNzgFVRT+Fzs="
+          format: base64
+          example: "UmVhbF9GcmllZHJpY2hfU2NobWVyejpnZWl6aXN0Z2VpbDY5"
 
     ### USER ###
     BaseUser:
@@ -249,6 +267,8 @@ components:
           type: boolean
           example: false
 
+
+    ### GAME ###
     GameSession:
       type: object
       description: a game session object, maybe the same as lobby?
@@ -305,61 +325,11 @@ components:
         correctAnswer:
           type: string
 
+  securitySchemes:
+    SessionToken:
+      type: apiKey
+      in: query
+      name: X-SESSION-TOKEN
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#    UserUpdate:
-#      description: contains any of the following updatable properties
-#      allOf:
-#        - $ref: "#/components/schemas/User"
-#          type: object
-#          properties:
-#            UserName:
-#              $ref: "#/components/schemas/UserName"
-#            UserConfirmed:
-#              $ref: "#/components/schemas/UserConfirmed"
-#
-#    UserScoreUpdate:
-#      description: contains any of the following updatable properties
-#      type: object
-#      anyOf:
-#        - $ref: "#/components/schemas/User"
-#        - $ref: "#/components/schemas/UserUpdate"
-#
-#  securitySchemes:
-#    session_token:
-#      type: apiKey
-#      description: session token to authorize requests.
-#      name: SessionToken
-#      $ref: "#/components/schemas/SessionToken"
-#      in: query
-#    basic_auth:
-#      type: http
-#      scheme: basic
-#      description: Use `user` / `passwd` as the test credentials
-#
-#security:
-#  - session_token: []
-#  - OAuth2:
-#      - read
-#      - write4
+security:
+  - SessionToken: []

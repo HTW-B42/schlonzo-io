@@ -1,20 +1,30 @@
 package org.htw.quizgame.server;
 
-import java.util.UUID;
-import org.htw.quizgame.api.model.AuthSuccess;
-import org.htw.quizgame.api.model.BasicAuth;
-import org.htw.quizgame.api.model.User;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import static org.springframework.http.ResponseEntity.ok;
 
-@Controller
-public class AuthController implements org.htw.quizgame.api.AuthApi {
+import java.util.Base64;
+import java.util.UUID;
+import org.htw.quizgame.api.AuthApi;
+import org.htw.quizgame.api.model.AuthSuccessDTO;
+import org.htw.quizgame.api.model.UserDTO;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class AuthController implements AuthApi {
 
   @Override
-  public ResponseEntity<AuthSuccess> authPost(BasicAuth basicAuth) {
-    User user = new User().userId(UUID.randomUUID()).userEmail("string@google.de")
-        .userName("jakob_nicht").userConfirmed(false);
-    AuthSuccess obj = new AuthSuccess().sessionToken("54d6f7g8h9jkß098hg7f6").user(user);
-    return ResponseEntity.ok(obj);
+  public ResponseEntity<AuthSuccessDTO> authPost(
+      org.htw.quizgame.api.model.BasicAuthDTO basicAuth) {
+    System.out.println(new String(Base64.getDecoder().decode(basicAuth.getAuthString())));
+    UserDTO user = new UserDTO()
+        .userId(UUID.randomUUID())
+        .userName("jakob_nicht")
+        .userEmail("string@google.de")
+        .userConfirmed(false);
+    AuthSuccessDTO success = new AuthSuccessDTO()
+        .sessionToken(UUID.randomUUID().toString())
+        .user(user);
+    return ok(success);
   }
 }
