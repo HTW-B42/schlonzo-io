@@ -252,7 +252,7 @@ components:
         hashed-password:
           description: hashed user password
           type: string
-          format: byte
+          format: base64
 
     User:
       type: object
@@ -267,7 +267,6 @@ components:
         user_id:
           description: a unique id for the user
           type: string
-          format: uuid
           example: "dfu90j39tj3497uiopoetrgu3984"
         user_confirmed:
           description: has the user confirmed his email address?
@@ -307,7 +306,6 @@ components:
       properties:
         user_id:
           type: string
-          format: uuid
         user_score:
           type: number
           minimum: 0

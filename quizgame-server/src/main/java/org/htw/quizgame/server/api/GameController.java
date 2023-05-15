@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GameController implements GameApi {
 
-
     private final QuestionDTO exampleQuestion;
     private final GameSessionDTO exampleGameSession;
 
