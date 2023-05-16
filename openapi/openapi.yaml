@@ -60,8 +60,6 @@ paths:
         '500':
           $ref: "#/components/responses/Error"
 
-
-
   /user/register:
     post:
       summary: register a new user

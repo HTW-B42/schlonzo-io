@@ -16,6 +16,7 @@ public class UserSession {
   private LocalDateTime expires;
 
   public UserSession(User user, String sessionToken) {
+    super();
     this.user = user;
     this.sessionToken = sessionToken;
     touch();

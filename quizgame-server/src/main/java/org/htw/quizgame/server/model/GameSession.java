@@ -27,15 +27,35 @@ public class GameSession {
 
   public GameSession(List<User> initialMembers) {
     super();
-    initialMembers.forEach(user -> {
-      lobbyMembers.add(user);
-      scoreboard.put(user, BigDecimal.valueOf(0));
-    });
+    initialMembers.forEach(this::initializeMember);
   }
 
   public void addScore(User user, BigDecimal score) {
+    if (gameOver) {
+      return;
+    }
     BigDecimal newScore = scoreboard.get(user).add(score);
     scoreboard.put(user, newScore);
+  }
+
+  public void addMember(User user) {
+    if (gameOver) {
+      return;
+    }
+    initializeMember(user);
+  }
+
+  public void removeMember(User user) {
+    if (gameOver) {
+      return;
+    }
+    lobbyMembers.remove(user);
+    // TODO export score to user scoreboard?
+    scoreboard.remove(user);
+  }
+
+  public void end() {
+    gameOver = true;
   }
 
   public GameSessionDTO toDTO() {
@@ -44,6 +64,11 @@ public class GameSession {
         .lobbyMembers(lobbyMembers.stream().map(User::toDTO).toList())
         .scoreboard(scoreboard.entrySet().stream().map(GameSession::toUserScoreDTO).toList())
         .gameOver(gameOver);
+  }
+
+  private void initializeMember(User user) {
+    lobbyMembers.add(user);
+    scoreboard.put(user, BigDecimal.valueOf(0));
   }
 
   private static UserScoreDTO toUserScoreDTO(Entry<User, BigDecimal> userScore) {
