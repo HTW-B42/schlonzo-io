@@ -96,4 +96,8 @@
   margin-top: 10px;
   text-align: center;
 }
+.error {
+  border: 1px solid red;
+}
+
 
