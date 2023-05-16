@@ -1,20 +1,18 @@
 package org.htw.quizgame.server.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.htw.quizgame.api.model.RegisterUserDTO;
 import org.htw.quizgame.api.model.UserDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Document("users")
+@Data
+@Document
 public class User {
 
   @Id
   private String userId;
 
-  @Setter
   private Boolean userConfirmed;
 
   private String userName;

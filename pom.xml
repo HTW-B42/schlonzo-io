@@ -79,6 +79,7 @@
         <!-- /RELEASE_VERSION -->
         <executions>
           <execution>
+            <id>spring</id>
             <goals>
               <goal>generate</goal>
             </goals>
@@ -94,6 +95,20 @@
                 <generateSupportingFiles>false</generateSupportingFiles>
                 <interfaceOnly>true</interfaceOnly>
                 <fullJavaUtil>true</fullJavaUtil>
+              </configOptions>
+            </configuration>
+          </execution>
+          <execution>
+            <id>js</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+              <generatorName>javascript</generatorName>
+              <output>target/javascript</output>
+              <configOptions>
+
               </configOptions>
             </configuration>
           </execution>
