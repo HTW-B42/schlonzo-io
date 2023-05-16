@@ -18,7 +18,6 @@ public class AuthController implements AuthApi {
 
   @Autowired
   public AuthController(UserDTO exampleUser){
-
     this.exampleUser = exampleUser;
   }
 
