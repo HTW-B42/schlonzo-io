@@ -19,7 +19,7 @@ public class InfoController implements InfoApi {
   }
 
   @Override
-  public ResponseEntity<ApiInfoDTO> infoGet() {
+  public ResponseEntity<ApiInfoDTO> getApiInfo() {
     return ok(apiInfo);
   }
 }

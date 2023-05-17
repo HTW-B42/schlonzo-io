@@ -1,11 +1,5 @@
 package org.htw.quizgame.server.api;
 
-import static org.springframework.http.ResponseEntity.notFound;
-import static org.springframework.http.ResponseEntity.ok;
-
-import java.util.Base64;
-import java.util.Optional;
-import java.util.UUID;
 import org.htw.quizgame.api.AuthApi;
 import org.htw.quizgame.api.model.AuthSuccessDTO;
 import org.htw.quizgame.api.model.BasicAuthDTO;
@@ -19,6 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Base64;
+import java.util.UUID;
+
+import static org.springframework.http.ResponseEntity.ok;
+
 @RestController
 public class AuthController implements AuthApi {
 
@@ -27,13 +26,13 @@ public class AuthController implements AuthApi {
 
   @Autowired
   public AuthController(UserSessionRepository userSessionRepository,
-      UserRepository userRepository) {
+                        UserRepository userRepository) {
     this.userSessionRepository = userSessionRepository;
     this.userRepository = userRepository;
   }
 
   @Override
-  public ResponseEntity<AuthSuccessDTO> authPost(BasicAuthDTO basicAuth) {
+  public ResponseEntity<AuthSuccessDTO> performLogin(BasicAuthDTO basicAuth) {
     String s = new String(Base64.getDecoder().decode(basicAuth.getAuthString()));
     String[] auth = s.split(":");
     System.out.println(s);
@@ -44,12 +43,13 @@ public class AuthController implements AuthApi {
 //    Optional<User> user = userRepository.findUserByUserNameAndHashedPassword(auth[0], auth[1]);
 
 //    if (user.isPresent()) {
-      userSessionRepository.insert(new UserSession(new User(new RegisterUserDTO()), token));
-      AuthSuccessDTO success = new AuthSuccessDTO()
-          .sessionToken(token)
-          .user(new UserDTO().userId("egal"));
-      return ok(success);
+    userSessionRepository.insert(new UserSession(new User(new RegisterUserDTO()), token));
+    AuthSuccessDTO success = new AuthSuccessDTO()
+        .sessionToken(token)
+        .user(new UserDTO().userId("egal"));
+    return ok(success);
 //    }
 //    return notFound().build();
   }
+
 }

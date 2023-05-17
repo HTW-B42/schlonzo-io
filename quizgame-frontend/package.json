@@ -36,5 +36,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "quizgame-client-api": "file:../quizgame-client-api/"
   }
 }

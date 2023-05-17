@@ -11,6 +11,7 @@ servers:
 paths:
   /info:
     get:
+      operationId: getApiInfo
       summary: get api info
       responses:
         '200':
@@ -22,6 +23,7 @@ paths:
 
   /auth:
     post:
+      operationId: performLogin
       summary: authenticate using user name and password
       requestBody:
         required: true
@@ -43,6 +45,7 @@ paths:
 
   /user/name/test:
     post:
+      operationId: testUsername
       summary: test if username is available
       requestBody:
         required: true
@@ -62,6 +65,7 @@ paths:
 
   /user/register:
     post:
+      operationId: registerUser
       summary: register a new user
       requestBody:
         required: true
@@ -83,6 +87,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/SessionToken"
     get:
+      operationId: performLogout
       summary: logout
       responses:
         '200':
@@ -96,6 +101,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/SessionToken"
     get:
+      operationId: startGame
       summary: starts a game and returns game lobby object
       responses:
         '200':
@@ -113,6 +119,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/SessionToken"
     get:
+      operationId: getQuestion
       summary: get question
       responses:
         '200':
@@ -127,6 +134,7 @@ paths:
           $ref: "#/components/responses/Error"
 
     post:
+      operationId: answerQuestion
       summary: tell the server if the question was answered correctly
       parameters:
         - in: query

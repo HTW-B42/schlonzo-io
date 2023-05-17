@@ -1,6 +1,5 @@
 package org.htw.quizgame.server.api;
 
-import java.util.Optional;
 import org.htw.quizgame.api.UserApi;
 import org.htw.quizgame.api.model.RegisterUserDTO;
 import org.htw.quizgame.api.model.UserDTO;
@@ -12,6 +11,8 @@ import org.htw.quizgame.server.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 public class UserController implements UserApi {
@@ -31,7 +32,7 @@ public class UserController implements UserApi {
   }
 
   @Override
-  public ResponseEntity<Void> userLogoutGet(String sessionToken) {
+  public ResponseEntity<Void> performLogout(String sessionToken) {
     Optional<User> user = identityProvider.identifyBySessionToken(sessionToken);
     if (user.isPresent()) {
       // TODO logout and end gamesession
@@ -41,14 +42,15 @@ public class UserController implements UserApi {
   }
 
   @Override
-  public ResponseEntity<Boolean> userNameTestPost(UserNameDTO userNameDTO) {
+  public ResponseEntity<Boolean> testUsername(UserNameDTO userNameDTO) {
     return ResponseEntity.ok(true);
   }
 
   @Override
-  public ResponseEntity<UserDTO> userRegisterPost(RegisterUserDTO registerUserDTO) {
+  public ResponseEntity<UserDTO> registerUser(RegisterUserDTO registerUserDTO) {
     User newUser = userRepository.insert(new User(registerUserDTO));
     System.out.println("neuer user angelegt: \n" + newUser.toDTO().toString());
     return ResponseEntity.ok(newUser.toDTO());
   }
+
 }
