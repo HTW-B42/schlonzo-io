@@ -134,7 +134,7 @@
               <modelNameSuffix>${server-client-api.model-name-suffix}</modelNameSuffix>
               <output>${client-api.location}</output>
               <configOptions>
-                <invokerPackage>${client-api.package}</invokerPackage>
+                <usePromises>true</usePromises>
                 <moduleName>${client-api.package}</moduleName>
               </configOptions>
             </configuration>
