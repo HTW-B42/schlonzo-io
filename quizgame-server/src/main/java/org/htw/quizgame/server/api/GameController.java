@@ -30,19 +30,18 @@ public class GameController implements GameApi {
   }
 
   @Override
-  public ResponseEntity<QuestionDTO> gameQuestionGet(String sessionToken) {
+  public ResponseEntity<GameSessionDTO> answerQuestion(String sessionToken, Boolean userAnsweredCorrectly) {
+    return ResponseEntity.ok(exampleGameSession);
+  }
+
+  @Override
+  public ResponseEntity<QuestionDTO> getQuestion(String sessionToken) {
     return ResponseEntity.ok(exampleQuestion);
   }
 
   @Override
-  public ResponseEntity<GameSessionDTO> gameQuestionPost(String sessionToken,
-      Boolean userAnsweredCorrectly) {
+  public ResponseEntity<GameSessionDTO> startGame(String sessionToken) {
     return ResponseEntity.ok(exampleGameSession);
   }
 
-  @Override
-  public ResponseEntity<GameSessionDTO> gameStartGet(String sessionToken) {
-    userSessionRepository.toString();
-    return ResponseEntity.ok(exampleGameSession);
-  }
 }

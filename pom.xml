@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.htw.quizgame</groupId>
@@ -14,6 +14,12 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <client-api.location>quizgame-client-api</client-api.location>
+    <client-api.package>quizgame-js-client-api</client-api.package>
+    <server-api.location>quizgame-server-api</server-api.location>
+    <server-api.package>${project.groupId}.api</server-api.package>
+    <server-api.model-package>${server-api.package}.model</server-api.model-package>
+    <server-client-api.model-name-suffix>DTO</server-client-api.model-name-suffix>
   </properties>
 
   <dependencies>
@@ -72,25 +78,42 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${server-api.location}</directory>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+            <fileset>
+              <directory>${client-api.location}</directory>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
-        <!-- RELEASE_VERSION -->
         <version>6.2.1</version>
-        <!-- /RELEASE_VERSION -->
         <executions>
           <execution>
-            <id>spring</id>
+            <id>spring server api generation</id>
             <goals>
               <goal>generate</goal>
             </goals>
             <configuration>
               <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
               <generatorName>spring</generatorName>
-              <apiPackage>org.htw.quizgame.api</apiPackage>
-              <modelPackage>org.htw.quizgame.api.model</modelPackage>
-              <modelNameSuffix>DTO</modelNameSuffix>
+              <apiPackage>${server-api.package}</apiPackage>
+              <modelPackage>${server-api.model-package}</modelPackage>
+              <groupId>${project.groupId}.server</groupId>
+              <artifactId>api</artifactId>
+              <modelNameSuffix>${server-client-api.model-name-suffix}</modelNameSuffix>
+              <output>${server-api.location}</output>
               <configOptions>
-                <sourceFolder>src/gen/java/main</sourceFolder>
+                <sourceFolder>src/main/java</sourceFolder>
                 <skipDefaultInterface>true</skipDefaultInterface>
                 <generateSupportingFiles>false</generateSupportingFiles>
                 <interfaceOnly>true</interfaceOnly>
@@ -99,21 +122,66 @@
             </configuration>
           </execution>
           <execution>
-            <id>js</id>
+            <id>javascript client code generation</id>
             <goals>
               <goal>generate</goal>
             </goals>
             <configuration>
               <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
               <generatorName>javascript</generatorName>
-              <output>target/javascript</output>
+              <modelNameSuffix>${server-client-api.model-name-suffix}</modelNameSuffix>
+              <output>${client-api.location}</output>
               <configOptions>
-
+                <invokerPackage>${client-api.package}</invokerPackage>
+                <moduleName>${client-api.package}</moduleName>
               </configOptions>
             </configuration>
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <configuration>
+          <executable>mvn</executable>
+          <arguments>
+            <argument>-f</argument>
+            <argument>${project.basedir}/${server-api.location}/pom.xml</argument>
+            <argument>clean</argument>
+            <argument>install</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+      <!--            <plugin>-->
+      <!--              <groupId>org.codehaus.mojo</groupId>-->
+      <!--              <artifactId>exec-maven-plugin</artifactId>-->
+      <!--              <version>3.1.0</version>-->
+      <!--              <executions>-->
+      <!--                <execution>-->
+      <!--                  <id>npm build</id>-->
+      <!--                  <configuration>-->
+      <!--                    -->
+      <!--                  </configuration>-->
+      <!--                </execution>-->
+      <!--              </executions>-->
+      <!--            </plugin>-->
     </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.1.0</version>
+          <executions>
+            <execution>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>exec</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 </project>
