@@ -24,6 +24,7 @@ public class GameSession {
   private Map<User, BigDecimal> scoreboard = new HashMap<>();
 
   private Boolean gameOver = false;
+  private int score;
 
   public GameSession(List<User> initialMembers) {
     super();
@@ -77,5 +78,16 @@ public class GameSession {
         .userScore(userScore.getValue());
   }
 
-}
 
+  public void updateScore(String questionId, boolean isCorrect) {
+    if (isCorrect) {
+      this.score += 10; // Angenommen, die richtige Antwort erhöht den Punktestand um 10
+    } else {
+      this.score -= 5; // Angenommen, eine falsche Antwort verringert den Punktestand um 5
+
+    }
+
+  }
+
+
+}
