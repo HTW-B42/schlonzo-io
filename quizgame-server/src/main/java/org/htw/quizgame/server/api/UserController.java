@@ -36,14 +36,18 @@ public class UserController implements UserApi {
     Optional<User> user = identityProvider.identifyBySessionToken(sessionToken);
     if (user.isPresent()) {
       // TODO logout and end gamesession
-      return ResponseEntity.ok(null);
+
+      return ResponseEntity.ok().build();
     }
-    return null;
+    return ResponseEntity.notFound().build();
   }
 
   @Override
   public ResponseEntity<Boolean> testUsername(UserNameDTO userNameDTO) {
-    return ResponseEntity.ok(true);
+    String username = userNameDTO.getUserName();
+    boolean exists = userRepository.existsUserByUserName(username);
+    System.out.println(exists);
+    return ResponseEntity.ok(!exists);
   }
 
   @Override
@@ -52,5 +56,4 @@ public class UserController implements UserApi {
     System.out.println("neuer user angelegt: \n" + newUser.toDTO().toString());
     return ResponseEntity.ok(newUser.toDTO());
   }
-
 }
