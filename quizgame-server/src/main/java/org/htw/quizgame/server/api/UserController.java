@@ -39,7 +39,12 @@ public class UserController implements UserApi {
       return ResponseEntity.notFound().build();
     }
     Optional<UserSession> session = identityProvider.findSessionForUser(user.get());
-    session.ifPresent(UserSession::logout);
+    if(session.isPresent()) {
+      // TODO LOGOUT FUNKTIONIERT NICHT. SELBER SESSION TOKEN
+      if(session.get().isValid()){
+      session.ifPresent(UserSession::logout);
+      }
+    }
     return ResponseEntity.ok().build();
   }
 

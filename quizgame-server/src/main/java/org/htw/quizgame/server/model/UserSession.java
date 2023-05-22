@@ -28,6 +28,7 @@ public class UserSession {
 
   public void logout() {
     expires = LocalDateTime.now();
+    System.out.println("session expired" + expires);
   }
 
   public boolean isValid() {
