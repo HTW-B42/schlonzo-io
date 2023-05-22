@@ -8,6 +8,7 @@
     <groupId>org.htw.quizgame</groupId>
     <artifactId>api</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>client</artifactId>
@@ -17,6 +18,29 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.1</version>
+        <executions>
+          <execution>
+            <id>copy openapi file</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>.</outputDirectory>
+              <overwrite>true</overwrite>
+              <resources>
+                <resource>
+                  <directory>../openapi</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -29,10 +53,9 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+              <inputSpec>${project.basedir}/openapi.yaml</inputSpec>
               <generatorName>javascript</generatorName>
               <modelNameSuffix>${server-client-api.model-name-suffix}</modelNameSuffix>
-              <output>${client-api.location}</output>
               <configOptions>
                 <usePromises>true</usePromises>
                 <moduleName>${client-api.package}</moduleName>

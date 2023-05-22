@@ -8,10 +8,11 @@
     <groupId>org.htw.quizgame</groupId>
     <artifactId>api</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>server</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>${parent.version}</version>
   <name>quizgame-server</name>
   <description>quizgame server</description>
 
@@ -76,6 +77,29 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.1</version>
+        <executions>
+          <execution>
+            <id>copy openapi file</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>.</outputDirectory>
+              <overwrite>true</overwrite>
+              <resources>
+                <resource>
+                  <directory>../openapi</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
@@ -99,7 +123,7 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+              <inputSpec>${project.basedir}/openapi.yaml</inputSpec>
               <generatorName>spring</generatorName>
               <apiPackage>${server-api.package}</apiPackage>
               <modelPackage>${server-api.model-package}</modelPackage>

@@ -13,6 +13,7 @@
 
   <modules>
     <module>quizgame-server</module>
+    <module>quizgame-frontend</module>
   </modules>
 
   <properties>
@@ -25,118 +26,4 @@
     <server-client-api.model-name-suffix>DTO</server-client-api.model-name-suffix>
     <spring.version>3.0.6</spring.version>
   </properties>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.3.1</version>
-        <executions>
-          <execution>
-            <id>copy-server</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>quizgame-server/</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.basedir}/openapi/</directory>
-                  <includes>*.yaml</includes>
-                  <targetPath>openapi/</targetPath>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-frontend</id>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>quizgame-frontend/</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.basedir}/openapi/</directory>
-                  <includes>*.yaml</includes>
-                  <targetPath>openapi/</targetPath>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
-
-  <!--      <plugin>-->
-  <!--        <artifactId>maven-jar-plugin</artifactId>-->
-  <!--        <version>2.4</version>-->
-  <!--        <executions>-->
-  <!--          <execution>-->
-  <!--            <id>default-jar</id>-->
-  <!--            <phase>none</phase>-->
-  <!--          </execution>-->
-  <!--        </executions>-->
-  <!--      </plugin>-->
-  <!--      <plugin>-->
-  <!--        <artifactId>maven-install-plugin</artifactId>-->
-  <!--        <version>2.4</version>-->
-  <!--        <executions>-->
-  <!--          <execution>-->
-  <!--            <id>default-install</id>-->
-  <!--            <phase>none</phase>-->
-  <!--          </execution>-->
-  <!--        </executions>-->
-  <!--      </plugin>-->
-
-  <profiles>
-    <profile>
-      <id>frontend</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>3.1.0</version>
-            <executions>
-              <execution>
-                <id>build server api interface</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>build spring server</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>backend</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>3.1.0</version>
-            <executions>
-              <execution>
-                <id>build javascript client</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>build frontend with updated js client</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>
