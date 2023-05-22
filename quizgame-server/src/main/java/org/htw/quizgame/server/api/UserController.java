@@ -8,6 +8,7 @@ import org.htw.quizgame.server.IdentityProvider;
 import org.htw.quizgame.server.data.GameSessionRepository;
 import org.htw.quizgame.server.data.UserRepository;
 import org.htw.quizgame.server.model.User;
+import org.htw.quizgame.server.model.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,21 +34,20 @@ public class UserController implements UserApi {
 
   @Override
   public ResponseEntity<Void> performLogout(String sessionToken) {
-    Optional<User> user = identityProvider.identifyBySessionToken(sessionToken);
-    if (user.isPresent()) {
-      // TODO logout and end gamesession
-
-      return ResponseEntity.ok().build();
+    Optional<User> user = identityProvider.findUserForSessionToken(sessionToken);
+    if (user.isEmpty()) {
+      return ResponseEntity.notFound().build();
     }
-    return ResponseEntity.notFound().build();
+    Optional<UserSession> session = identityProvider.findSessionForUser(user.get());
+    session.ifPresent(UserSession::logout);
+    return ResponseEntity.ok().build();
   }
 
   @Override
   public ResponseEntity<Boolean> testUsername(UserNameDTO userNameDTO) {
     String username = userNameDTO.getUserName();
-    boolean exists = userRepository.existsUserByUserName(username);
-    System.out.println(exists);
-    return ResponseEntity.ok(!exists);
+    Boolean nameAvailable = !userRepository.existsUserByUserName(username);
+    return ResponseEntity.ok(nameAvailable);
   }
 
   @Override

@@ -13,24 +13,25 @@
 
   <groupId>org.htw.quizgame</groupId>
   <artifactId>server</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <name>quizgame-server</name>
   <description>quizgame server</description>
 
   <properties>
     <java.version>17</java.version>
+    <spring.version>${parent.version}</spring.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
-      <version>3.0.6</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-      <version>3.0.6</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -43,35 +44,20 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.htw.quizgame.server</groupId>
-      <artifactId>api</artifactId>
-      <version>1.0.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-mongodb</artifactId>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-mongodb</artifactId>
       <version>4.0.5</version>
     </dependency>
-    <!--    <dependency>-->
-    <!--      <groupId>org.springframework.boot</groupId>-->
-    <!--      <artifactId>spring-boot-starter-security</artifactId>-->
-    <!--    </dependency>-->
-    <!--    <dependency>-->
-    <!--      <groupId>org.springframework.boot</groupId>-->
-    <!--      <artifactId>spring-boot-starter-test</artifactId>-->
-    <!--      <version>2.7.5</version>-->
-    <!--      <scope>test</scope>-->
-    <!--    </dependency>-->
-    <!--    <dependency>-->
-    <!--      <groupId>org.springframework.security</groupId>-->
-    <!--      <artifactId>spring-security-test</artifactId>-->
-    <!--      <scope>test</scope>-->
-    <!--    </dependency>-->
+    <dependency>
+      <groupId>org.htw.quizgame.server</groupId>
+      <artifactId>api</artifactId>
+      <version>1.0.0</version>
+    </dependency>
   </dependencies>
 
   <build>

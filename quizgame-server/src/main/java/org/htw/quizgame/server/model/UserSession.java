@@ -26,6 +26,10 @@ public class UserSession {
     expires = LocalDateTime.now().plusMinutes(10);
   }
 
+  public void logout() {
+    expires = LocalDateTime.now();
+  }
+
   public boolean isValid() {
     return expires.isAfter(LocalDateTime.now());
   }

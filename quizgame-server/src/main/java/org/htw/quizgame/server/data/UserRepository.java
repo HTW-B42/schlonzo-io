@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserRepository extends MongoRepository<User, String> {
 
-  Optional<User> findUserByUserNameAndHashedPassword(String username, String hashedpwd);
-  boolean existsUserByUserName(String username);
+  Optional<User> findUserByUserName(String s);
+  Boolean existsUserByUserName(String username);
 }
