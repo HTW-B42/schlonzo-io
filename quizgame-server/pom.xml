@@ -5,13 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.0.6</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <groupId>org.htw.quizgame</groupId>
+    <artifactId>api</artifactId>
+    <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.htw.quizgame</groupId>
   <artifactId>server</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>quizgame-server</name>
@@ -19,59 +17,60 @@
 
   <properties>
     <java.version>17</java.version>
+    <lombok.version>1.18.26</lombok.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-      <version>3.0.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-      <version>3.0.6</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
       <optional>true</optional>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.htw.quizgame.server</groupId>
-      <artifactId>api</artifactId>
-      <version>1.0.0</version>
-      <scope>compile</scope>
+      <version>${lombok.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-mongodb</artifactId>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-mongodb</artifactId>
       <version>4.0.5</version>
     </dependency>
-    <!--    <dependency>-->
-    <!--      <groupId>org.springframework.boot</groupId>-->
-    <!--      <artifactId>spring-boot-starter-security</artifactId>-->
-    <!--    </dependency>-->
-    <!--    <dependency>-->
-    <!--      <groupId>org.springframework.boot</groupId>-->
-    <!--      <artifactId>spring-boot-starter-test</artifactId>-->
-    <!--      <version>2.7.5</version>-->
-    <!--      <scope>test</scope>-->
-    <!--    </dependency>-->
-    <!--    <dependency>-->
-    <!--      <groupId>org.springframework.security</groupId>-->
-    <!--      <artifactId>spring-security-test</artifactId>-->
-    <!--      <scope>test</scope>-->
-    <!--    </dependency>-->
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>2.0.1.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>2.2.8</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+      <version>0.2.4</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-core</artifactId>
+      <version>9.0.73</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -87,6 +86,36 @@
             </exclude>
           </excludes>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>6.2.1</version>
+        <executions>
+          <execution>
+            <id>spring server api generation</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+              <generatorName>spring</generatorName>
+              <apiPackage>${server-api.package}</apiPackage>
+              <modelPackage>${server-api.model-package}</modelPackage>
+              <groupId>${project.groupId}.server</groupId>
+              <artifactId>api</artifactId>
+              <modelNameSuffix>${server-client-api.model-name-suffix}</modelNameSuffix>
+              <configOptions>
+                <sourceFolder>src/generated-sources/java</sourceFolder>
+                <skipDefaultInterface>true</skipDefaultInterface>
+                <generateSupportingFiles>false</generateSupportingFiles>
+                <interfaceOnly>true</interfaceOnly>
+                <fullJavaUtil>true</fullJavaUtil>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

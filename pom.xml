@@ -9,225 +9,89 @@
   <version>1.0-SNAPSHOT</version>
   <name>quizgame-api</name>
   <description>quizgame api</description>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>quizgame-server</module>
+  </modules>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <client-api.location>quizgame-client-api</client-api.location>
     <client-api.package>quizgame-js-client-api</client-api.package>
-    <server-api.location>quizgame-server-api</server-api.location>
     <server-api.package>${project.groupId}.api</server-api.package>
     <server-api.model-package>${server-api.package}.model</server-api.model-package>
     <server-client-api.model-name-suffix>DTO</server-client-api.model-name-suffix>
+    <spring.version>3.0.6</spring.version>
   </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-      <version>2.7.5</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-jpa</artifactId>
-      <version>3.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openapitools</groupId>
-      <artifactId>jackson-databind-nullable</artifactId>
-      <version>0.2.1</version>
-    </dependency>
-    <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-swagger2</artifactId>
-      <version>2.9.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
-      <version>6.0.8</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>6.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>io.swagger.core.v3</groupId>
-      <artifactId>swagger-annotations</artifactId>
-      <version>2.2.8</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <version>2.0.1.Final</version>
-    </dependency>
-    <dependency>
-      <groupId>io.swagger.core.v3</groupId>
-      <artifactId>swagger-models</artifactId>
-      <version>2.2.7</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-core</artifactId>
-      <version>9.0.73</version>
-    </dependency>
-  </dependencies>
 
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>3.2.0</version>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>${server-api.location}</directory>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-            <fileset>
-              <directory>${client-api.location}</directory>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.openapitools</groupId>
-        <artifactId>openapi-generator-maven-plugin</artifactId>
-        <version>6.2.1</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.1</version>
         <executions>
           <execution>
-            <id>spring server api generation</id>
-            <phase>generate-sources</phase>
+            <id>copy-server</id>
+            <phase>initialize</phase>
             <goals>
-              <goal>generate</goal>
+              <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
-              <generatorName>spring</generatorName>
-              <apiPackage>${server-api.package}</apiPackage>
-              <modelPackage>${server-api.model-package}</modelPackage>
-              <groupId>${project.groupId}.server</groupId>
-              <artifactId>api</artifactId>
-              <modelNameSuffix>${server-client-api.model-name-suffix}</modelNameSuffix>
-              <output>${server-api.location}</output>
-              <configOptions>
-                <sourceFolder>src/main/java</sourceFolder>
-                <skipDefaultInterface>true</skipDefaultInterface>
-                <generateSupportingFiles>false</generateSupportingFiles>
-                <interfaceOnly>true</interfaceOnly>
-                <fullJavaUtil>true</fullJavaUtil>
-              </configOptions>
+              <outputDirectory>quizgame-server/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/openapi/</directory>
+                  <includes>*.yaml</includes>
+                  <targetPath>openapi/</targetPath>
+                </resource>
+              </resources>
             </configuration>
           </execution>
           <execution>
-            <id>javascript client code generation</id>
-            <phase>generate-sources</phase>
+            <id>copy-frontend</id>
             <goals>
-              <goal>generate</goal>
+              <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
-              <generatorName>javascript</generatorName>
-              <modelNameSuffix>${server-client-api.model-name-suffix}</modelNameSuffix>
-              <output>${client-api.location}</output>
-              <configOptions>
-                <usePromises>true</usePromises>
-                <moduleName>${client-api.package}</moduleName>
-              </configOptions>
+              <outputDirectory>quizgame-frontend/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/openapi/</directory>
+                  <includes>*.yaml</includes>
+                  <targetPath>openapi/</targetPath>
+                </resource>
+              </resources>
             </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.1.0</version>
-        <executions>
-          <execution>
-            <id>build server api interface</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <workingDirectory>${server-api.location}</workingDirectory>
-              <executable>mvn</executable>
-              <arguments>
-                <argument>clean</argument>
-                <argument>install</argument>
-              </arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>build javascript client</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <workingDirectory>quizgame-client-api</workingDirectory>
-              <executable>npm</executable>
-              <arguments>
-                <argument>install</argument>
-              </arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>build spring server</id>
-            <phase>install</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <workingDirectory>quizgame-server</workingDirectory>
-              <executable>mvn</executable>
-              <arguments>
-                <argument>clean</argument>
-                <argument>install</argument>
-              </arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>build frontend with updated js client</id>
-            <phase>install</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <workingDirectory>quizgame-frontend</workingDirectory>
-              <executable>npm</executable>
-              <arguments>
-                <argument>install</argument>
-              </arguments>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.4</version>
-        <executions>
-          <execution>
-            <id>default-jar</id>
-            <phase>none</phase>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-install-plugin</artifactId>
-        <version>2.4</version>
-        <executions>
-          <execution>
-            <id>default-install</id>
-            <phase>none</phase>
           </execution>
         </executions>
       </plugin>
     </plugins>
   </build>
+
+
+  <!--      <plugin>-->
+  <!--        <artifactId>maven-jar-plugin</artifactId>-->
+  <!--        <version>2.4</version>-->
+  <!--        <executions>-->
+  <!--          <execution>-->
+  <!--            <id>default-jar</id>-->
+  <!--            <phase>none</phase>-->
+  <!--          </execution>-->
+  <!--        </executions>-->
+  <!--      </plugin>-->
+  <!--      <plugin>-->
+  <!--        <artifactId>maven-install-plugin</artifactId>-->
+  <!--        <version>2.4</version>-->
+  <!--        <executions>-->
+  <!--          <execution>-->
+  <!--            <id>default-install</id>-->
+  <!--            <phase>none</phase>-->
+  <!--          </execution>-->
+  <!--        </executions>-->
+  <!--      </plugin>-->
 
   <profiles>
     <profile>
