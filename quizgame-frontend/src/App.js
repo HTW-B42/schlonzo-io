@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {DefaultApi, BasicAuthDTO, AuthSuccessDTO} from 'quizgame-client-api/src';
 import './App.css';
 
@@ -24,7 +24,7 @@ function App() {
   const [showHelp, setShowHelp] = useState(false);
   const [helpContent, setHelpContent] = useState('');
 
-  const client = new DefaultApi()
+  const client = useMemo(() => new DefaultApi(), []);
 
   useEffect(() => {
     if (isLoggedIn && !gameSession) {
