@@ -94,12 +94,21 @@ function App() {
     }
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setGameSession(null);
-    setCurrentQuestion(null);
-    setScore(0);
+  const handleLogout = async () => {
+    setIsLoading(true);
+    try {
+      await client.logout();
+      setIsLoggedIn(false);
+      setGameSession(null);
+      setCurrentQuestion(null);
+      setScore(0);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+  
 
   const handleRegister = async () => {
     setIsLoading(true);
