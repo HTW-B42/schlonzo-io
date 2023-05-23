@@ -4,14 +4,19 @@ class Client {
   }
 
   async authenticate(user, password) {
-    const response = await fetch(`${this.baseURL}/auth?BasicAuth=${btoa(user + ':' + password)}`);
+    const response = await fetch(`${this.baseURL}/auth`, {
+      headers: {
+        'Authorization': 'Basic ' + btoa(user + ':' + password),
+      },
+    });
     if (response.ok) {
       const data = await response.json();
       return data;
     } else {
       throw new Error("Authentication failed");
     }
-  }
+}
+
 
   async registerUser(newUser) {
     const response = await fetch(`${this.baseURL}/users/register`, {
