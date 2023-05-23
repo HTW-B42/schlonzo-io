@@ -15,7 +15,7 @@ class Client {
     } else {
       throw new Error("Authentication failed");
     }
-}
+  }
 
 
 
