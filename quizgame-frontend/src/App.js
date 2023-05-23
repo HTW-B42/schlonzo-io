@@ -167,8 +167,6 @@ function App() {
     setIsDarkMode(!isDarkMode);
   };
 
-  const showDarkModeToggle = isLoggedIn;
-
   return (
     <div className={`App ${isDarkMode ? 'dark-mode' : ''}`}>
       <div className="auth-container">
