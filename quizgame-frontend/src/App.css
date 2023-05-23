@@ -38,7 +38,6 @@
   }
 }
 
-
 .auth-container {
   display: flex;
   justify-content: center;
@@ -87,7 +86,6 @@
   text-align: center;
   margin-top: 20px;
 }
-
 
 .error-message {
   color: #dc3545;
@@ -151,4 +149,46 @@
 
 .progress-container {
   margin-bottom: 20px;
+}
+
+/* Dark Mode Styles */
+
+.dark-mode .auth-container,
+.dark-mode .auth-form,
+.dark-mode .App-header {
+  background-color: #333;
+}
+
+.dark-mode .auth-form input[type="text"],
+.dark-mode .auth-form input[type="password"] {
+  background-color: #444;
+  color: #fff;
+}
+
+.dark-mode .auth-form button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.dark-mode .App-link {
+  color: #61dafb;
+}
+
+.dark-mode .toggle-icon {
+  color: #fff;
+}
+
+.dark-mode .dark-mode-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1;
 }
