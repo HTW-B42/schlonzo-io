@@ -25,7 +25,7 @@ function App() {
   const client = new DefaultApi()
 
   useEffect(() => {
-    if (!gameSession) {
+    if (isLoggedIn && !gameSession) {
       setIsLoading(true);
       client.startGame(difficulty, selectedCategory)
         .then(session => {
@@ -37,10 +37,10 @@ function App() {
           setIsLoading(false);
         });
     }
-  }, [client, gameSession, difficulty, selectedCategory]);
+  }, [client, gameSession, difficulty, selectedCategory, isLoggedIn]);
 
   useEffect(() => {
-    if (gameSession && !currentQuestion) {
+    if (isLoggedIn && gameSession && !currentQuestion) {
       setIsLoading(true);
       client.getQuestion()
         .then(question => {
@@ -52,7 +52,7 @@ function App() {
           setIsLoading(false);
         });
     }
-  }, [client, gameSession, currentQuestion]);
+  }, [client, gameSession, currentQuestion, isLoggedIn]);
 
   const handleAnswer = (answer) => {
     setIsLoading(true);
@@ -91,6 +91,13 @@ function App() {
     }
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setGameSession(null);
+    setCurrentQuestion(null);
+    setScore(0);
+  };
+
   const handleRegister = async () => {
     setIsLoading(true);
     if (password !== confirmPassword) {
@@ -109,6 +116,8 @@ function App() {
       try {
         const response = await client.registerUser(newUser);
         console.log(response);
+
+
         setIsLoading(false);
         setIsLoggedIn(true);
       } catch (error) {
@@ -136,65 +145,66 @@ function App() {
 
   return (
     <div className="auth-container">
-      <div className="auth-form">
-        <h2>{isRegistering ? 'Register' : 'Login'}</h2>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className={isRegistering && errorMessage && password !== confirmPassword ? 'error' : ''}
-        />
-        {isRegistering && (
-          <>
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className={errorMessage && password !== confirmPassword ? 'error' : ''}
-            />
-            {password !== confirmPassword && (
-              <p className="error-message">Passwords do not match</p>
-            )}
-            <input
-              type="text"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </>
-        )}
-        {errorMessage && !isRegistering && (
-          <p className="error-message">{errorMessage}</p>
-        )}
-        <button onClick={isRegistering ? handleRegister : handleLogin}>
-          {isRegistering ? 'Register' : 'Login'}
-        </button>
-        {!isRegistering && !isLoggedIn && (
-          <p>
-            Don't have an account yet?{' '}
-            <a href="#" onClick={() => setIsRegistering(true)}>
-              Register!
-            </a>
-          </p>
-        )}
-        {isRegistering && (
-          <p>
-            Already have an account?{' '}
-            <a href="#" onClick={handleSwitchToLogin}>
-              Back to Login
-            </a>
-          </p>
-        )}
-      </div>
-      {isLoggedIn && (
+      {!isLoggedIn ? (
+        <div className="auth-form">
+          <h2>{isRegistering ? 'Register' : 'Login'}</h2>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={isRegistering && errorMessage && password !== confirmPassword ? 'error' : ''}
+          />
+          {isRegistering && (
+            <>
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={errorMessage && password !== confirmPassword ? 'error' : ''}
+              />
+              {password !== confirmPassword && (
+                <p className="error-message">Passwords do not match</p>
+              )}
+              <input
+                type="text"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </>
+          )}
+          {errorMessage && !isRegistering && (
+            <p className="error-message">{errorMessage}</p>
+          )}
+          <button onClick={isRegistering ? handleRegister : handleLogin}>
+            {isRegistering ? 'Register' : 'Login'}
+          </button>
+          {!isRegistering && (
+            <p>
+              Don't have an account yet?{' '}
+              <a href="#" onClick={() => setIsRegistering(true)}>
+                Register!
+              </a>
+            </p>
+          )}
+          {isRegistering && (
+            <p>
+              Already have an account?{' '}
+              <a href="#" onClick={handleSwitchToLogin}>
+                Back to Login
+              </a>
+            </p>
+          )}
+        </div>
+      ) : (
         <>
           <div className="game-container">
             {isLoading ? (
@@ -249,6 +259,7 @@ function App() {
                 ))}
               </select>
             </div>
+            <button onClick={handleLogout}>Logout</button>
           </div>
         </>
       )}

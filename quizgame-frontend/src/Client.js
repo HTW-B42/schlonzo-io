@@ -15,7 +15,7 @@ class Client {
     } else {
       throw new Error("Authentication failed");
     }
-}
+  }
 
 
   async registerUser(newUser) {
@@ -94,5 +94,5 @@ class Client {
 
 // Use the API client
 // client.authenticate('username', 'password');
-console.log(Client); 
+console.log(Client);
 export default Client;
