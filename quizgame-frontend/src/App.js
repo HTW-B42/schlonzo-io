@@ -23,7 +23,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [helpContent, setHelpContent] = useState('');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   const client = useMemo(() => new DefaultApi(), []);
 
@@ -230,15 +230,6 @@ function App() {
                 </a>
               </p>
             )}
-            {showDarkModeToggle && (
-              <div className="dark-mode-toggle" onClick={toggleDarkMode}>
-                {isDarkMode ? (
-                  <span className="toggle-icon">☀️</span>
-                ) : (
-                  <span className="toggle-icon">🌙</span>
-                )}
-              </div>
-            )}
           </div>
         ) : (
           <>
@@ -314,15 +305,13 @@ function App() {
                   </div>
                 )}
               </div>
-              {showDarkModeToggle && (
-                <div className="dark-mode-toggle" onClick={toggleDarkMode}>
-                  {isDarkMode ? (
-                    <span className="toggle-icon">☀️</span>
-                  ) : (
-                    <span className="toggle-icon">🌙</span>
-                  )}
-                </div>
-              )}
+              <div className="dark-mode-toggle" onClick={toggleDarkMode}>
+                {isDarkMode ? (
+                  <span className="toggle-icon">☀️</span>
+                ) : (
+                  <span className="toggle-icon">🌙</span>
+                )}
+              </div>
             </div>
           </>
         )}
