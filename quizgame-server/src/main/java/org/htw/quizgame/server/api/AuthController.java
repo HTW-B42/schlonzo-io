@@ -60,7 +60,9 @@ public class AuthController implements AuthApi {
         AuthSuccessDTO success = new AuthSuccessDTO()
             .sessionToken(token)
             .user(user.toDTO());
-        return ok(success);
+        ResponseEntity<AuthSuccessDTO> ok = ok(success);
+        System.out.println(ok);
+        return ok;
       }
     }
     return notFound().header("msg", "no authorization").build();

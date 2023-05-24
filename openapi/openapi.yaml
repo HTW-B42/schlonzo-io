@@ -236,8 +236,18 @@ components:
           example: "UmVhbF9GcmllZHJpY2hfU2NobWVyejpnZWl6aXN0Z2VpbDY5"
 
     ### USER ###
-    BaseUser:
+    UserName:
+      type: string
+      description: the users login and user name
+      pattern: '^(?=.{8,22}$)(?![_])(?!.*[_]{2})[a-zA-Z0-9_]+(?<![_])$'
+      example: "Real_Friedrich_Schmerz"
+
+    RegisterUser:
       type: object
+      required:
+        - user_name
+        - user_email
+        - hashed-password
       properties:
         user_name:
           description: the users login and user name
@@ -250,23 +260,6 @@ components:
           pattern: '^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'
           format: email
           example: "RealFriedrichSchmerz@cdu.biz"
-
-    UserName:
-      type: object
-      required:
-        - user_name
-      allOf:
-        - $ref: "#/components/schemas/BaseUser"
-
-    RegisterUser:
-      type: object
-      required:
-        - user_name
-        - user_email
-        - hashed-password
-      allOf:
-        - $ref: "#/components/schemas/BaseUser"
-      properties:
         hashed-password:
           description: hashed user password
           type: string
@@ -278,9 +271,18 @@ components:
         - user_name
         - user_email
         - user_confirmed
-      allOf:
-        - $ref: "#/components/schemas/BaseUser"
       properties:
+        user_name:
+          description: the users login and user name
+          type: string
+          pattern: '^(?=.{8,22}$)(?![_])(?!.*[_]{2})[a-zA-Z0-9_]+(?<![_])$'
+          example: "Real_Friedrich_Schmerz"
+        user_email:
+          description: the users email address
+          type: string
+          pattern: '^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'
+          format: email
+          example: "RealFriedrichSchmerz@cdu.biz"
         user_confirmed:
           description: has the user confirmed his email address?
           type: boolean

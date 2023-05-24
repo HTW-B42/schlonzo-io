@@ -1,3 +1,6 @@
 .idea/
 target/
 **/node_modules/
+quizgame-client-api/
+quizgame-server-api/
+.gitignore
