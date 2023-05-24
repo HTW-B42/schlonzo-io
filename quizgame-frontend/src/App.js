@@ -84,8 +84,8 @@ function App() {
   const handleLogin = async () => {
     setIsLoading(true);
     try {
-      const response = await client.authenticate(username, password);
-      console.log(response);
+      const basicAuth = new BasicAuthDTO(btoa(username + ":" + password));
+      await client.performLogin(basicAuth).then(obj => console.log(obj)) 
       setIsLoading(false);
       setIsLoggedIn(true);
     } catch (error) {
