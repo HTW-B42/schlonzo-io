@@ -3,7 +3,6 @@ package org.htw.quizgame.server.api;
 import org.htw.quizgame.api.UserApi;
 import org.htw.quizgame.api.model.RegisterUserDTO;
 import org.htw.quizgame.api.model.UserDTO;
-import org.htw.quizgame.api.model.UserNameDTO;
 import org.htw.quizgame.server.IdentityProvider;
 import org.htw.quizgame.server.data.GameSessionRepository;
 import org.htw.quizgame.server.data.UserRepository;
@@ -43,9 +42,8 @@ public class UserController implements UserApi {
   }
 
   @Override
-  public ResponseEntity<Boolean> testUsername(UserNameDTO userNameDTO) {
-    String username = userNameDTO.getUserName();
-    Boolean nameAvailable = !userRepository.existsUserByUserName(username);
+  public ResponseEntity<Boolean> testUsername(String name) {
+    Boolean nameAvailable = !userRepository.existsUserByUserName(name);
     return ResponseEntity.ok(nameAvailable);
   }
 

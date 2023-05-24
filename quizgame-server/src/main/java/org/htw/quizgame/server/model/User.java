@@ -17,7 +17,7 @@ public class User {
   @Id
   private String userName;
 
-  private Boolean userConfirmed;
+  private Boolean userConfirmed = false;
 
   private String userEmail;
 
