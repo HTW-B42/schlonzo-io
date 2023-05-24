@@ -41,7 +41,7 @@ function App() {
           setIsLoading(false);
         });
     }
-  }, [client, isLoggedIn, gameSession, sessionToken]);
+  }, [isLoggedIn, gameSession, sessionToken]);
 
   useEffect(() => {
     if (isLoggedIn && gameSession && !currentQuestion) {
@@ -56,7 +56,7 @@ function App() {
           setIsLoading(false);
         });
     }
-  }, [client, isLoggedIn, gameSession, currentQuestion, sessionToken]);
+  }, [isLoggedIn, gameSession, currentQuestion, sessionToken]);
 
   const handleAnswer = (answer) => {
     setIsLoading(true);
