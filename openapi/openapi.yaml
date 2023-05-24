@@ -47,12 +47,8 @@ paths:
     post:
       operationId: testUsername
       summary: test if username is available
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserName"
+      parameters:
+        - $ref: "#/components/parameters/UserName"
       responses:
         '200':
           description: ok
@@ -162,6 +158,13 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/SessionToken"
+
+    UserName:
+      in: header
+      name: X-USER-NAME
+      required: true
+      schema:
+        $ref: "#/components/schemas/UserName"
 
   responses:
     Error:
