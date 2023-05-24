@@ -16,8 +16,8 @@ import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.springframework.http.ResponseEntity.notFound;
-import static org.springframework.http.ResponseEntity.ok;
+import static java.util.Objects.isNull;
+import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 public class AuthController implements AuthApi {
@@ -36,6 +36,9 @@ public class AuthController implements AuthApi {
 
   @Override
   public ResponseEntity<AuthSuccessDTO> performLogin(BasicAuthDTO basicAuth) {
+    if (isNull(basicAuth.getAuthString())) {
+      return badRequest().header("msg", "no auth_string in request body").build();
+    }
     String s = new String(Base64.getDecoder().decode(basicAuth.getAuthString()));
     String[] auth = s.split(":");
     if (auth.length != 2) {
@@ -46,7 +49,7 @@ public class AuthController implements AuthApi {
     if (optionalUser.isPresent()) {
       User user = optionalUser.get();
       if (!user.getHashedPassword().equals(auth[1])) {
-        return notFound().build();
+        return notFound().header("msg", "no authorization").build();
       }
       Optional<UserSession> session = identityProvider.findSessionForUser(user);
       if (session.isPresent()) {
@@ -60,7 +63,7 @@ public class AuthController implements AuthApi {
         return ok(success);
       }
     }
-    return notFound().build();
+    return notFound().header("msg", "no authorization").build();
   }
 
 }
