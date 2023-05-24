@@ -277,15 +277,10 @@ components:
       required:
         - user_name
         - user_email
-        - user_id
         - user_confirmed
       allOf:
         - $ref: "#/components/schemas/BaseUser"
       properties:
-        user_id:
-          description: a unique id for the user
-          type: string
-          example: "dfu90j39tj3497uiopoetrgu3984"
         user_confirmed:
           description: has the user confirmed his email address?
           type: boolean
@@ -319,10 +314,10 @@ components:
       type: object
       description: a user score object
       required:
-        - user_id
+        - user_name
         - user_score
       properties:
-        user_id:
+        user_name:
           type: string
         user_score:
           type: number

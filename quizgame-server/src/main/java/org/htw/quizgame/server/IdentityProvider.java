@@ -17,18 +17,34 @@ public class IdentityProvider {
     this.userSessionRepository = userSessionRepository;
   }
 
-  public Optional<User> identifyBySessionToken(String token) {
+  public Optional<UserSession> findValidSessionBySessionToken(String token) {
     Optional<UserSession> session = userSessionRepository.findUserSessionBySessionToken(token);
+    if (session.isEmpty()) {
+      return Optional.empty();
+    }
+    UserSession userSession = session.get();
+    if (!userSession.isValid()) {
+      userSessionRepository.delete(userSession);
+      return Optional.empty();
+    }
+    userSession.touch();
+    return Optional.of(userSession);
+  }
+
+  public Optional<UserSession> findSessionByUser(User user) {
+    Optional<UserSession> session = userSessionRepository.findUserSessionByUser(user);
     if (session.isPresent()) {
       UserSession userSession = session.get();
-      if (!userSession.isValid()) {
+      if (userSession.isValid()) {
+        return session;
+      } else {
         userSessionRepository.delete(userSession);
-        return Optional.empty();
       }
-      userSession.touch();
-      return Optional.ofNullable(userSession.getUser());
     }
     return Optional.empty();
   }
 
+  public void invalidate(UserSession userSession) {
+    userSessionRepository.delete(userSession);
+  }
 }

@@ -73,7 +73,7 @@ public class GameSession {
 
   private static UserScoreDTO toUserScoreDTO(Entry<User, BigDecimal> userScore) {
     return new UserScoreDTO()
-        .userId(userScore.getKey().getUserId())
+        .userName(userScore.getKey().getUserName())
         .userScore(userScore.getValue());
   }
 

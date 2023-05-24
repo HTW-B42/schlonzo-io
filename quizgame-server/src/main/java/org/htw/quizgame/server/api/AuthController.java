@@ -3,8 +3,7 @@ package org.htw.quizgame.server.api;
 import org.htw.quizgame.api.AuthApi;
 import org.htw.quizgame.api.model.AuthSuccessDTO;
 import org.htw.quizgame.api.model.BasicAuthDTO;
-import org.htw.quizgame.api.model.RegisterUserDTO;
-import org.htw.quizgame.api.model.UserDTO;
+import org.htw.quizgame.server.IdentityProvider;
 import org.htw.quizgame.server.data.UserRepository;
 import org.htw.quizgame.server.data.UserSessionRepository;
 import org.htw.quizgame.server.model.User;
@@ -14,42 +13,57 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Base64;
+import java.util.Optional;
 import java.util.UUID;
 
-import static org.springframework.http.ResponseEntity.ok;
+import static java.util.Objects.isNull;
+import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 public class AuthController implements AuthApi {
 
   private final UserSessionRepository userSessionRepository;
   private final UserRepository userRepository;
+  private final IdentityProvider identityProvider;
 
   @Autowired
   public AuthController(UserSessionRepository userSessionRepository,
-                        UserRepository userRepository) {
+                        UserRepository userRepository, IdentityProvider identityProvider) {
     this.userSessionRepository = userSessionRepository;
     this.userRepository = userRepository;
+    this.identityProvider = identityProvider;
   }
 
   @Override
   public ResponseEntity<AuthSuccessDTO> performLogin(BasicAuthDTO basicAuth) {
+    if (isNull(basicAuth.getAuthString())) {
+      return badRequest().header("msg", "no auth_string in request body").build();
+    }
     String s = new String(Base64.getDecoder().decode(basicAuth.getAuthString()));
     String[] auth = s.split(":");
-    System.out.println(s);
     if (auth.length != 2) {
-      return ResponseEntity.notFound().build();
+      return notFound().build();
     }
     String token = UUID.randomUUID().toString();
-//    Optional<User> user = userRepository.findUserByUserNameAndHashedPassword(auth[0], auth[1]);
-
-//    if (user.isPresent()) {
-    userSessionRepository.insert(new UserSession(new User(new RegisterUserDTO()), token));
-    AuthSuccessDTO success = new AuthSuccessDTO()
-        .sessionToken(token)
-        .user(new UserDTO().userId("egal"));
-    return ok(success);
-//    }
-//    return notFound().build();
+    Optional<User> optionalUser = userRepository.findUserByUserName(auth[0]);
+    if (optionalUser.isPresent()) {
+      User user = optionalUser.get();
+      if (!user.getHashedPassword().equals(auth[1])) {
+        return notFound().header("msg", "no authorization").build();
+      }
+      Optional<UserSession> session = identityProvider.findSessionByUser(user);
+      if (session.isPresent()) {
+        return ok(new AuthSuccessDTO().user(user.toDTO())
+            .sessionToken(session.get().getSessionToken()));
+      } else {
+        userSessionRepository.insert(new UserSession(user, token));
+        AuthSuccessDTO success = new AuthSuccessDTO()
+            .sessionToken(token)
+            .user(user.toDTO());
+        return ok(success);
+      }
+    }
+    return notFound().header("msg", "no authorization").build();
   }
 
 }

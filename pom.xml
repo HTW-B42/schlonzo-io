@@ -110,6 +110,7 @@
               <apiPackage>${server-api.package}</apiPackage>
               <modelPackage>${server-api.model-package}</modelPackage>
               <groupId>${project.groupId}.server</groupId>
+              <artifactVersion>${project.version}</artifactVersion>
               <artifactId>api</artifactId>
               <modelNameSuffix>${server-client-api.model-name-suffix}</modelNameSuffix>
               <output>${server-api.location}</output>
@@ -235,6 +236,17 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-maven-plugin</artifactId>
+            <version>6.2.1</version>
+            <executions>
+              <execution>
+                <id>spring server api generation</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
             <version>3.1.0</version>
@@ -256,6 +268,17 @@
       <id>backend</id>
       <build>
         <plugins>
+          <plugin>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-maven-plugin</artifactId>
+            <version>6.2.1</version>
+            <executions>
+              <execution>
+                <id>javascript client code generation</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
