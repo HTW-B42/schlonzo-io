@@ -26,11 +26,6 @@ public class UserSession {
     expires = LocalDateTime.now().plusMinutes(10);
   }
 
-  public void logout() {
-    expires = LocalDateTime.now();
-    System.out.println("session expired" + expires);
-  }
-
   public boolean isValid() {
     return expires.isAfter(LocalDateTime.now());
   }

@@ -51,7 +51,7 @@ public class AuthController implements AuthApi {
       if (!user.getHashedPassword().equals(auth[1])) {
         return notFound().header("msg", "no authorization").build();
       }
-      Optional<UserSession> session = identityProvider.findSessionForUser(user);
+      Optional<UserSession> session = identityProvider.findSessionByUser(user);
       if (session.isPresent()) {
         return ok(new AuthSuccessDTO().user(user.toDTO())
             .sessionToken(session.get().getSessionToken()));

@@ -34,17 +34,11 @@ public class UserController implements UserApi {
 
   @Override
   public ResponseEntity<Void> performLogout(String sessionToken) {
-    Optional<User> user = identityProvider.findUserForSessionToken(sessionToken);
-    if (user.isEmpty()) {
+    Optional<UserSession> session = identityProvider.findValidSessionBySessionToken(sessionToken);
+    if (session.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
-    Optional<UserSession> session = identityProvider.findSessionForUser(user.get());
-    if(session.isPresent()) {
-      // TODO LOGOUT FUNKTIONIERT NICHT. SELBER SESSION TOKEN
-      if(session.get().isValid()){
-      session.ifPresent(UserSession::logout);
-      }
-    }
+    session.ifPresent(identityProvider::invalidate);
     return ResponseEntity.ok().build();
   }
 

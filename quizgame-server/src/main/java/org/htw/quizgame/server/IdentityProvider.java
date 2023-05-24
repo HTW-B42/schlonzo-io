@@ -17,21 +17,21 @@ public class IdentityProvider {
     this.userSessionRepository = userSessionRepository;
   }
 
-  public Optional<User> findUserForSessionToken(String token) {
+  public Optional<UserSession> findValidSessionBySessionToken(String token) {
     Optional<UserSession> session = userSessionRepository.findUserSessionBySessionToken(token);
-    if (session.isPresent()) {
-      UserSession userSession = session.get();
-      if (!userSession.isValid()) {
-        userSessionRepository.delete(userSession);
-        return Optional.empty();
-      }
-      userSession.touch();
-      return Optional.ofNullable(userSession.getUser());
+    if (session.isEmpty()) {
+      return Optional.empty();
     }
-    return Optional.empty();
+    UserSession userSession = session.get();
+    if (!userSession.isValid()) {
+      userSessionRepository.delete(userSession);
+      return Optional.empty();
+    }
+    userSession.touch();
+    return Optional.of(userSession);
   }
 
-  public Optional<UserSession> findSessionForUser(User user) {
+  public Optional<UserSession> findSessionByUser(User user) {
     Optional<UserSession> session = userSessionRepository.findUserSessionByUser(user);
     if (session.isPresent()) {
       UserSession userSession = session.get();
@@ -44,4 +44,7 @@ public class IdentityProvider {
     return Optional.empty();
   }
 
+  public void invalidate(UserSession userSession) {
+    userSessionRepository.delete(userSession);
+  }
 }
