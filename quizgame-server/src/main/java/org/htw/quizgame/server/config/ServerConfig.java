@@ -1,4 +1,4 @@
-package org.htw.quizgame.server;
+package org.htw.quizgame.server.config;
 
 import org.htw.quizgame.api.model.ApiInfoDTO;
 import org.htw.quizgame.api.model.GameSessionDTO;

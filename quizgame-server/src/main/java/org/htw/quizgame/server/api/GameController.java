@@ -3,7 +3,7 @@ package org.htw.quizgame.server.api;
 import org.htw.quizgame.api.GameApi;
 import org.htw.quizgame.api.model.GameSessionDTO;
 import org.htw.quizgame.api.model.QuestionDTO;
-import org.htw.quizgame.server.IdentityProvider;
+import org.htw.quizgame.server.service.IdentityProvider;
 import org.htw.quizgame.server.model.GameSession;
 import org.htw.quizgame.server.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
