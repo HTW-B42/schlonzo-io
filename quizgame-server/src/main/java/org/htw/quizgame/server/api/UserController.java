@@ -4,7 +4,7 @@ import org.htw.quizgame.api.UserApi;
 import org.htw.quizgame.api.model.RegisterUserDTO;
 import org.htw.quizgame.api.model.UserDTO;
 import org.htw.quizgame.server.IdentityProvider;
-import org.htw.quizgame.server.data.GameSessionRepository;
+import org.htw.quizgame.server.data.GameResultRepository;
 import org.htw.quizgame.server.data.UserRepository;
 import org.htw.quizgame.server.model.User;
 import org.htw.quizgame.server.model.UserSession;
@@ -18,13 +18,13 @@ import java.util.Optional;
 public class UserController implements UserApi {
 
   private final UserRepository userRepository;
-  private final GameSessionRepository gameSessionRepository;
+  private final GameResultRepository gameSessionRepository;
   private final IdentityProvider identityProvider;
 
   @Autowired
   public UserController(
       UserRepository userRepository,
-      GameSessionRepository gameSessionRepository,
+      GameResultRepository gameSessionRepository,
       IdentityProvider identityProvider) {
     this.userRepository = userRepository;
     this.gameSessionRepository = gameSessionRepository;

@@ -1,41 +1,32 @@
 package org.htw.quizgame.server.model;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.GeneratedValue;
+import lombok.Generated;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.htw.quizgame.api.model.GameSessionDTO;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Getter
-@Document
-@NoArgsConstructor
-@AllArgsConstructor
-public class GameSession implements ConvertsTo<GameSessionDTO> {
+public class GameSession implements SaveAs<GameResult>, ConvertsTo<GameSessionDTO> {
 
+  private static final Collector<UserScore, ?, Map<User, Boolean>> TO_ANSWERS_MAP =
+      Collectors.toMap(UserScore::getUser, ignored -> false);
+  private static final Collector<UserScore, ?, Map<User, BigDecimal>> TO_SCORE_MAP =
+      Collectors.toMap(UserScore::getUser, UserScore::getScore);
+  private final List<UserSession> lobbyMembers = new ArrayList<>();
+  private final List<UserScore> scoreboard = new ArrayList<>();
+  private final LinkedHashMap<Question, Map<User, Boolean>> questions = new LinkedHashMap<>();
+  private Question question;
+  private Map<User, Boolean> answers;
   @Id
+  @GeneratedValue
   private String gameID;
-
-  private List<UserSession> lobbyMembers = new ArrayList<>();
-
-  private List<UserScore> scoreboard = new ArrayList<>();
-
   private Boolean gameOver = false;
-
-  public void addScore(User user, BigDecimal score) {
-    if (gameOver) {
-      return;
-    }
-    getScoreFor(user).ifPresentOrElse(
-        s -> s.addScore(score),
-        () -> System.out.println("score konnte keinem user zugeordnet werden")
-    );
-  }
 
   private Optional<UserScore> getScoreFor(User user) {
     return scoreboard.stream()
@@ -55,6 +46,26 @@ public class GameSession implements ConvertsTo<GameSessionDTO> {
       return;
     }
     lobbyMembers.remove(userSession);
+  }
+
+  public GameSession answerQuestion(User user, boolean correct) {
+    answers.put(user, correct);
+    return this;
+  }
+
+  public GameSession nextQuestion(Question question) {
+    if (this.question != null) {
+      questions.put(this.question, this.answers);
+    }
+    if (question == null) {
+      // TODO end game from service
+      end();
+      return this;
+    }
+    this.question = question;
+    this.answers = new HashMap<>(scoreboard.stream().collect(TO_ANSWERS_MAP));
+    questions.put(question, null);
+    return this;
   }
 
   public void end() {
@@ -81,5 +92,9 @@ public class GameSession implements ConvertsTo<GameSessionDTO> {
     scoreboard.add(userSession.getUserScore());
   }
 
+  @Override
+  public GameResult toEntity() {
+    return new GameResult(scoreboard.stream().collect(TO_SCORE_MAP), questions);
+  }
 }
 

@@ -1,7 +1,6 @@
 package org.htw.quizgame.server.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.htw.quizgame.api.model.RegisterUserDTO;
@@ -13,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements ConvertsTo<UserDTO>, SaveAs<User> {
 
   @Id
   private String userName;
@@ -32,10 +31,16 @@ public class User {
     userConfirmed = false;
   }
 
+  @Override
   public UserDTO toDTO() {
     return new UserDTO()
         .userName(userName)
         .userEmail(userEmail)
         .userConfirmed(userConfirmed);
+  }
+
+  @Override
+  public User toEntity() {
+    return this;
   }
 }

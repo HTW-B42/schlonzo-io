@@ -1,10 +1,8 @@
 package org.htw.quizgame.server.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import org.htw.quizgame.api.model.AuthSuccessDTO;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,15 +10,12 @@ import java.time.LocalDateTime;
 import static java.util.Objects.isNull;
 
 @Getter
-@Document
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserSession {
+public class UserSession implements ConvertsTo<AuthSuccessDTO> {
 
+  private final User user;
+  private final String sessionToken;
   @Id
   private String userSessionID;
-  private User user;
-  private String sessionToken;
   private LocalDateTime expires;
   private GameSession gameSession;
   private UserScore userScore;
@@ -48,10 +43,11 @@ public class UserSession {
   }
 
   public UserSession answerQuestion(boolean correct) {
-    if (correct) {
-      userScore.addScore(BigDecimal.valueOf(10));
+    if (gameSession == null || userScore == null || gameSession.getGameOver()) {
+      throw new RuntimeException("no question to answer...");
     } else {
-      userScore.addScore(BigDecimal.valueOf(-5));
+      gameSession.answerQuestion(user, correct);
+      userScore.addScore(BigDecimal.valueOf(correct ? 10 : -5));
     }
     return this;
   }
@@ -63,5 +59,12 @@ public class UserSession {
 
   public boolean isValid() {
     return expires.isAfter(LocalDateTime.now());
+  }
+
+  @Override
+  public AuthSuccessDTO toDTO() {
+    return new AuthSuccessDTO()
+        .user(user.toDTO())
+        .sessionToken(sessionToken);
   }
 }

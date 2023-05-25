@@ -44,6 +44,7 @@ public class IdentityProvider {
   }
 
   public void invalidate(UserSession userSession) {
+    // TODO alle Daten aus user session speichern und dann
     userSessionRepository.delete(userSession);
   }
 }
