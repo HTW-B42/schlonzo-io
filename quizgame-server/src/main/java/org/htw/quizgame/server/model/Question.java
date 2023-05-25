@@ -1,6 +1,8 @@
 package org.htw.quizgame.server.model;
 
 import org.htw.quizgame.api.model.QuestionDTO;
+import org.htw.quizgame.server.model.util.ConvertsTo;
+import org.htw.quizgame.server.model.util.SaveAs;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;

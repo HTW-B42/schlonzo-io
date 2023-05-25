@@ -1,4 +1,4 @@
-package org.htw.quizgame.server.model;
+package org.htw.quizgame.server.model.util;
 
 import java.io.Serializable;
 

@@ -4,6 +4,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 import org.htw.quizgame.api.model.UserScoreDTO;
+import org.htw.quizgame.server.model.util.ConvertsTo;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;

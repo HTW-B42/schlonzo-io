@@ -1,13 +1,19 @@
 package org.htw.quizgame.server.model;
 
 import jakarta.persistence.GeneratedValue;
-import lombok.Generated;
 import lombok.Getter;
 import org.htw.quizgame.api.model.GameSessionDTO;
+import org.htw.quizgame.server.model.util.ConvertsTo;
+import org.htw.quizgame.server.model.util.SaveAs;
 import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -68,7 +74,7 @@ public class GameSession implements SaveAs<GameResult>, ConvertsTo<GameSessionDT
     return this;
   }
 
-  public void end() {
+  private void end() {
     gameOver = true;
     // TODO export scores
   }
@@ -87,14 +93,14 @@ public class GameSession implements SaveAs<GameResult>, ConvertsTo<GameSessionDT
         .gameOver(gameOver);
   }
 
-  private void initializeMember(UserSession userSession) {
-    lobbyMembers.add(userSession);
-    scoreboard.add(userSession.getUserScore());
-  }
-
   @Override
   public GameResult toEntity() {
     return new GameResult(scoreboard.stream().collect(TO_SCORE_MAP), questions);
+  }
+
+  private void initializeMember(UserSession userSession) {
+    lobbyMembers.add(userSession);
+    scoreboard.add(userSession.getUserScore());
   }
 }
 

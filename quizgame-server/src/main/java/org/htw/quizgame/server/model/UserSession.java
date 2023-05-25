@@ -2,6 +2,7 @@ package org.htw.quizgame.server.model;
 
 import lombok.Getter;
 import org.htw.quizgame.api.model.AuthSuccessDTO;
+import org.htw.quizgame.server.model.util.ConvertsTo;
 import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;

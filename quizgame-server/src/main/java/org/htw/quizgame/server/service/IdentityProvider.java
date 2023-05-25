@@ -1,4 +1,4 @@
-package org.htw.quizgame.server;
+package org.htw.quizgame.server.service;
 
 import java.util.Optional;
 import org.htw.quizgame.server.data.UserSessionRepository;

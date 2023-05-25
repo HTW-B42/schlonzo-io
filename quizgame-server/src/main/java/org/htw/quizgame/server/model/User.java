@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.htw.quizgame.api.model.RegisterUserDTO;
 import org.htw.quizgame.api.model.UserDTO;
+import org.htw.quizgame.server.model.util.ConvertsTo;
+import org.htw.quizgame.server.model.util.SaveAs;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
