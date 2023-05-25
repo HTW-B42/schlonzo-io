@@ -2,13 +2,14 @@ package org.htw.quizgame.server.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.htw.quizgame.api.model.RegisterUserDTO;
 import org.htw.quizgame.api.model.UserDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
+@Getter
 @Document
 @NoArgsConstructor
 @AllArgsConstructor

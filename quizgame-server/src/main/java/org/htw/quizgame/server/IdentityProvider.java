@@ -27,8 +27,7 @@ public class IdentityProvider {
       userSessionRepository.delete(userSession);
       return Optional.empty();
     }
-    userSession.touch();
-    return Optional.of(userSession);
+    return Optional.of(userSession.touch());
   }
 
   public Optional<UserSession> findSessionByUser(User user) {
