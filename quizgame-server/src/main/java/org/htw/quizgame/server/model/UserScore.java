@@ -28,6 +28,10 @@ public class UserScore implements ConvertsTo<UserScoreDTO> {
         .build();
   }
 
+  public User getUser() {
+    return userSession.getUser();
+  }
+
   public void addScore(BigDecimal score) {
     this.score = this.score.add(score);
   }
