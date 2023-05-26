@@ -1,4 +1,4 @@
-package org.htw.quizgame.server;
+package org.htw.quizgame.server.service;
 
 import java.util.Optional;
 import org.htw.quizgame.server.data.UserSessionRepository;
@@ -27,8 +27,7 @@ public class IdentityProvider {
       userSessionRepository.delete(userSession);
       return Optional.empty();
     }
-    userSession.touch();
-    return Optional.of(userSession);
+    return Optional.of(userSession.touch());
   }
 
   public Optional<UserSession> findSessionByUser(User user) {
@@ -45,6 +44,7 @@ public class IdentityProvider {
   }
 
   public void invalidate(UserSession userSession) {
+    // TODO alle Daten aus user session speichern und dann
     userSessionRepository.delete(userSession);
   }
 }
