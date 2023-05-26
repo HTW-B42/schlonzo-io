@@ -53,4 +53,10 @@ public class UserController implements UserApi {
     System.out.println("neuer user angelegt: \n" + newUser.toDTO().toString());
     return ResponseEntity.ok(newUser.toDTO());
   }
+
+  @Override
+  public ResponseEntity<Boolean> testEmail(String mail) {
+    Boolean emailAvailable = !userRepository.existsUserByUserEmail(mail);
+    return ResponseEntity.ok(emailAvailable);
+  }
 }
