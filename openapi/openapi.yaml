@@ -109,6 +109,39 @@ paths:
         '500':
           $ref: "#/components/responses/Error"
 
+  /qustion/add:
+    post:
+      operationId: uploadQuestion
+      summary: upload a question to the database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Question"
+      responses:
+        '200':
+          description: question uploaded successfully
+        '500':
+          $ref: "#/components/schemas/Error"
+
+  /question/delete:
+    post:
+      operationId: deleteQuestion
+      summary: delete a question from the database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionString"
+      responses:
+        '200':
+          description: question deleted successfully
+        '500':
+          $ref: "#/components/schemas/Error"
+
+
   /game/start:
     parameters:
       - $ref: "#/components/parameters/SessionToken"
@@ -376,3 +409,7 @@ components:
             type: string
         correctAnswer:
           type: string
+
+    QuestionString:
+      type: string
+      description: question
