@@ -1,32 +1,32 @@
 import React, {useMemo, useState} from 'react';
-import {AuthSuccessDTO, BasicAuthDTO, DefaultApi,} from 'quizgame-client-api/src';
+import {BasicAuthDTO, DefaultApi,} from 'quizgame-client-api/src';
 import './App.css';
 import {useNavigate} from "react-router-dom";
+import {USER_NAME} from "./constants";
 
 const difficultyLevels = ['Easy', 'Medium', 'Hard'];
 const categories = ['Sports', 'History', 'Science'];
 
-function Login(state) {
+export default function Login({
+                                state, onSuccess
+                                // loggedIn = false,
+                                // user = null
+                              }) {
+
   const navigate = useNavigate()
-  const [sessionToken, setSessionToken] = useState('');
-  const [username, setUsername] = useState('');
+
+  if (state.loggedIn) {
+    navigate('/home')
+  }
+
+  const [username, setUsername] = useState(state.user ? state.user[USER_NAME] : '');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [gameSession, setGameSession] = useState(null);
-  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(state.isDarkMode);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAnswered, setIsAnswered] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [score, setScore] = useState(0);
-  const [difficulty, setDifficulty] = useState('Easy');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
-  const [helpContent, setHelpContent] = useState('');
-  const [isDarkMode, setIsDarkMode] = useState(true);
 
   const client = useMemo(() => new DefaultApi(), []);
 
@@ -84,27 +84,18 @@ function Login(state) {
   //   setIsCorrect(false);
   // };
 
-  const handleLogin = () => {
-    setIsLoading(true);
-    const basicAuth = new BasicAuthDTO(btoa(`${username}:${password}`));
-    client.performLogin(basicAuth)
-        .then((obj)=>AuthSuccessDTO.constructFromObject(obj))
-        .then((data) => {
-          state.session_token = data.session_token
-          state.username = data.user.user_name
-          state.email = data.user.user_email
-          console.log(data)
-          navigate('/home')
-          // setSessionToken(data.sessionToken);
-          // setUsername(data.user.user_name);
-          // setEmail(data.user.user_email);
-          // setIsLoading(false);
-          // setIsLoggedIn(true);
-        })
+  const handleLogin = async () => {
+    setIsLoading(true)
+    const basicAuth = new BasicAuthDTO(btoa(`${username}:${password}`))
+    let authSuccess
+    await client.performLogin(basicAuth)
+        .then((res) => authSuccess = res)
         .catch((error) => {
-          console.error('Error:', error);
-          setIsLoading(false);
-        });
+          console.error('Error: ', error)
+        })
+        .finally(() => setIsLoading(false));
+    onSuccess(authSuccess)
+    navigate('/home')
   };
 
   // const handleLogout = () => {
@@ -124,31 +115,32 @@ function Login(state) {
   //     });
   // };
 
+
   const handleRegister = async () => {
-    setIsLoading(true);
     if (password !== confirmPassword) {
       setErrorMessage('Passwords do not match');
-      setIsLoading(false);
     } else if (!password || !confirmPassword) {
       setErrorMessage('Please fill in both password fields');
-      setIsLoading(false);
     } else {
       setErrorMessage('');
+
       const newUser = {
         name: username,
         email: email,
         password: password,
-      };
+      }
+
+      setIsLoading(true);
       try {
         const response = await client.registerUser(newUser);
         console.log(response);
 
-        setIsLoading(false);
-        setIsLoggedIn(true);
+        setIsLoading(true)
       } catch (error) {
         console.error('Error:', error);
-        setIsLoading(false);
       }
+
+      setIsLoading(false);
     }
   };
 
@@ -246,5 +238,3 @@ function Login(state) {
       </div>
   );
 }
-
-export default Login;

@@ -53,8 +53,10 @@ public class AuthController implements AuthApi {
       }
       Optional<UserSession> session = identityProvider.findSessionByUser(user);
       if (session.isPresent()) {
-        return ok(new AuthSuccessDTO().user(user.toDTO())
+        ResponseEntity<AuthSuccessDTO> ok = ok(new AuthSuccessDTO().user(user.toDTO())
             .sessionToken(session.get().getSessionToken()));
+        System.out.println(ok);
+        return ok;
       } else {
         userSessionRepository.insert(new UserSession(user, token));
         AuthSuccessDTO success = new AuthSuccessDTO()
