@@ -1,6 +1,6 @@
 package org.htw.quizgame.server.model;
 
-import jakarta.persistence.GeneratedValue;
+
 import lombok.Getter;
 import org.htw.quizgame.api.model.GameSessionDTO;
 import org.htw.quizgame.server.model.util.ConvertsTo;
@@ -30,7 +30,6 @@ public class GameSession implements SaveAs<GameResult>, ConvertsTo<GameSessionDT
   private Question question;
   private Map<User, Boolean> answers;
   @Id
-  @GeneratedValue
   private String gameID;
   private Boolean gameOver = false;
 

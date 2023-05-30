@@ -1,10 +1,10 @@
 package org.htw.quizgame.server.model;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+
 import lombok.*;
 import org.htw.quizgame.api.model.UserScoreDTO;
 import org.htw.quizgame.server.model.util.ConvertsTo;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -15,10 +15,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserScore implements ConvertsTo<UserScoreDTO> {
-  @Id
   @Setter
+  @Id
   private Long userScoreId;
-  @ManyToOne
   private UserSession userSession;
   private BigDecimal score;
 
