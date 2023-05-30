@@ -123,7 +123,7 @@ paths:
         '200':
           description: question uploaded successfully
         '500':
-          $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/Error"
 
   /question/delete:
     post:
@@ -139,7 +139,7 @@ paths:
         '200':
           description: question deleted successfully
         '500':
-          $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/Error"
 
 
   /game/start:
