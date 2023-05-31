@@ -19,18 +19,22 @@ public class QuestionController implements QuestionApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteQuestion(String body) {
-        Optional<Question> question = questionRepository.findQuestionByQuestion(body);
+    public ResponseEntity<Void> deleteQuestion(String s) {
+        Optional<Question> question = questionRepository.findQuestionByQuestion(s);
+        System.out.println("Question found?: " + question);
         if (question.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        System.out.println(question);
-        return null;
+        System.out.println("Question deleted:" + question);
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public ResponseEntity<Void> uploadQuestion(QuestionDTO questionDTO) {
         Question question = questionRepository.insert(new Question(questionDTO.getQuestion(),questionDTO.getAnswerChoices(),questionDTO.getCorrectAnswer()));
+        if(question.answers().size() != 4){
+            return ResponseEntity.notFound().build();
+        }
         System.out.println("New Question added: " + question);
         return ResponseEntity.ok().build();
     }
