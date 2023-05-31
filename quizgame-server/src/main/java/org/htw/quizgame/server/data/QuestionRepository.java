@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface QuestionRepository extends MongoRepository<Question, String> {
-    List<Question> findRandomQuestions(int count);
-
-    Optional<Question> findRandomQuestion();
+    Optional<Question> findQuestionByQuestion(String s);
+    void deleteQuestionByQuestion(String s);
 }

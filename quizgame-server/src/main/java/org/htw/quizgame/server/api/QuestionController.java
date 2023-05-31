@@ -1,38 +1,45 @@
 package org.htw.quizgame.server.api;
 
+import org.htw.quizgame.api.QuestionApi;
 import org.htw.quizgame.api.model.QuestionDTO;
 import org.htw.quizgame.server.data.QuestionRepository;
 import org.htw.quizgame.server.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-import static org.springframework.http.ResponseEntity.ok;
+@RestController
+public class QuestionController implements QuestionApi {
 
-public class QuestionController{
     private final QuestionRepository questionRepository;
 
     @Autowired
-    public QuestionController(QuestionRepository questionRepository){
+    public QuestionController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 
-    public ResponseEntity<QuestionDTO> addQuestion(QuestionDTO newQuestionDTO) {
-        Question newQuestion =questionRepository.insert(new Question(newQuestionDTO.getQuestion(),newQuestionDTO.getAnswerChoices(),newQuestionDTO.getCorrectAnswer()));
-        return ok(newQuestion.toDTO());
-    }
-
-    public void deleteQuestion(QuestionDTO newQuestionDTO) {
-        questionRepository.delete(new Question(newQuestionDTO.getQuestion(),newQuestionDTO.getAnswerChoices(),newQuestionDTO.getCorrectAnswer()));
-    }
-
-    public ResponseEntity<Question> getRndQuestionByID(){
-        Optional<Question> requested = questionRepository.findRandomQuestion();
-        if (requested == null){
-            //TODO exception
+    @Override
+    public ResponseEntity<Void> deleteQuestion(String s) {
+        Optional<Question> question = questionRepository.findQuestionByQuestion(s);
+        System.out.println("Question found?: " + question);
+        if (question.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(requested.get());
+        questionRepository.deleteQuestionByQuestion(question.get().question());
+        System.out.println("Question deleted:" + question);
+        return ResponseEntity.ok().build();
     }
 
+    @Override
+    public ResponseEntity<Void> uploadQuestion(QuestionDTO questionDTO) {
+        if(questionDTO.getAnswerChoices().size() != 4){
+            System.out.println("Wrong number of answers choices");
+            return ResponseEntity.notFound().build();
+        }
+        Question question = questionRepository.insert(new Question(questionDTO.getQuestion(),questionDTO.getAnswerChoices(),questionDTO.getCorrectAnswer()));
+        System.out.println("New Question added: " + question);
+        return ResponseEntity.ok().build();
+    }
 }
