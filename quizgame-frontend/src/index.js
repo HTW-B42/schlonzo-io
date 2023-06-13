@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import {AuthSuccessDTO, UserDTO} from 'quizgame-client-api/src';
 import './index.css';
 import Login from './login';
-import Home from "./home";
+import Home from "./components/Home";
 import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import {SESSION_TOKEN, USER} from "./constants";
-import Game from "./Game";
+import Game from "./components/Game";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -32,12 +32,12 @@ function App() {
     setLoggedIn(true)
   };
 
-  const onGameStartFromHome = function (gameId = null) {
-    if (gameId) {
-      // TODO join existing game gibts noch nicht, im moment nur neues Spiel starten:
-    } else {
-      // TODO create new game and join...
+  const onGameStartFromHome = function (response = {}) {
+    if (!response.hasOwnProperty("gameID") || !response.hasOwnProperty("scoreboard")) {
+      console.log('no valid session');
+      return
     }
+    setGameSession(response);
   };
 
   const onGameEnd = function (userScore = null) {
