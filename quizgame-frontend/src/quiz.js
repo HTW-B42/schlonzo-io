@@ -31,7 +31,7 @@ export default function Game({ state }) {
   const api = useMemo(() => new DefaultApi(), []);
 
   
-  const loadQuestion = useCallback(() => {
+  const fetchQuestion = useCallback(() => {
     setIsLoading(true);
     api
       .getQuestion(state.sessionToken)
@@ -43,11 +43,11 @@ export default function Game({ state }) {
         console.error('Error:', error);
         setIsLoading(false);
       });
-  }, [api, state]);
+  }, [api, state.sessionToken]);
 
   useEffect(() => {
-    loadQuestion();
-  }, [loadQuestion]);
+    fetchQuestion();
+  }, [fetchQuestion]);
 
   const handleAnswer = (answer) => {
     setIsLoading(true);
@@ -67,7 +67,7 @@ export default function Game({ state }) {
   
   const handleNextQuestion = () => {
     setAnsweredCorrectly(null);
-    loadQuestion();
+    fetchQuestion();
   };
   return (
     <div>
