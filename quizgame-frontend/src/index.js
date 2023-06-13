@@ -6,19 +6,27 @@ import Home from "./home";
 import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import {SESSION_TOKEN, USER} from "./constants";
+import * as PropTypes from "prop-types";
 
+
+class Game extends React.Component {
+  render() {
+    return null;
+  }
+}
+
+Game.propTypes = {
+  state: PropTypes.shape({
+    isLoading: PropTypes.bool,
+    loggedIn: PropTypes.bool,
+    sessionToken: PropTypes.string,
+    isDarkMode: PropTypes.bool,
+    user: PropTypes.any,
+    gameSession: PropTypes.any
+  })
+};
 
 function App() {
-
-  // const [state, setState] = useState({
-  //   loggedIn: false,
-  //   sessionToken: null,
-  //   isDarkMode: false,
-  //   isLoading: false,
-  //   user: null,
-  //   gameSession: null,
-  // })
-
   const [loggedIn, setLoggedIn] = useState(false)
   const [sessionToken, setSessionToken] = useState('')
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -50,15 +58,18 @@ function App() {
     }
   };
 
+  const onGameEnd = function (userScore = null) {
+
+  };
+
   return (
       // TODO <Header></Header>
       <React.StrictMode>
         <Router>
-          <Link to={'/'}>login</Link>
-          <Link to={'/home'}>home</Link>
           <Routes>
             <Route path={'/'} element={<Login state={state} onSuccess={onLoginSuccess}/>}></Route>
             <Route path={'/home'} element={<Home state={state} onGameStart={onGameStartFromHome}/>}></Route>
+            <Route path={'/game'} element={<Game state={state} onGameEnd={onGameEnd}/>}></Route>
           </Routes>
         </Router>
       </React.StrictMode>
