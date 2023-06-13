@@ -70,35 +70,32 @@ export default function Game({ state }) {
     fetchQuestion();
   };
   return (
-    <div>
-      {isLoading && <p>Loading...</p>}
-      {!isLoading && question && (
-      <div>
-        <h2>{question.question}</h2>
-        {question.answerChoices.map((answerChoice, index) => (
-          <button
-            key={index}
-            onClick={() => handleAnswer(answerChoice)}
-            className={
-              answeredCorrectly === answerChoice ? 'correct' : ''
-            }
-          >
-            {answerChoice}
-          </button>
-        ))}
-        {answeredCorrectly && (
-          <p className="feedback correct">Correct!</p>
+    <div className="container">
+      <div className="quiz">
+        {isLoading && <p>Loading...</p>}
+        {!isLoading && question && (
+          <div>
+            <h2 className="question">{question.question}</h2>
+            {question.answerChoices.map((answerChoice, index) => (
+              <button
+                key={index}
+                onClick={() => handleAnswer(answerChoice)}
+                className={`answer-button ${answeredCorrectly === answerChoice ? (answeredCorrectly ? '.correct' : '.incorrect') : ''}`}
+              >
+                {answerChoice}
+              </button>
+            ))}
+            {answeredCorrectly && <p className="feedback correct">Correct!</p>}
+            {answeredCorrectly === false && (
+              <p className="feedback incorrect">Incorrect!</p>
+            )}
+            <p className="score">Score: {score}</p>
+            <button onClick={handleNextQuestion}>Next Question</button>
+          </div>
         )}
-        {answeredCorrectly === false && (
-          <p className="feedback incorrect">Incorrect!</p>
-        )}
-        <p>Score: {score}</p>
-        <button onClick={handleNextQuestion}>Next Question</button>
       </div>
-    )}
-  </div>
-);
-
-
-  
+    </div>
+  );
 }
+
+
