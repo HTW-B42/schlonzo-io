@@ -44,4 +44,21 @@ public class QuestionController implements QuestionApi {
         System.out.println("New Question added: " + question);
         return ResponseEntity.ok().build();
     }
+
+
+    //@GetMapping("/questions/{id}")
+    public ResponseEntity<QuestionDTO> getQuestionById(String id) {
+        Optional<Question> question = questionRepository.findById(id);
+        if (question.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        QuestionDTO questionDTO = new QuestionDTO(
+                question.get().getQuestion(),
+                question.get().getAnswerChoices(),
+                question.get().getCorrectAnswer()
+        );
+        return ResponseEntity.ok(questionDTO);
+    }
+
 }
