@@ -22,12 +22,14 @@ public class QuestionController implements QuestionApi {
 
     @Override
     public ResponseEntity<Void> deleteQuestion(String s) {
-        Optional<Question> question = questionRepository.findQuestionByQuestion(s);
+        Optional<Question> question = questionRepository.findQuestionByQuestion(s.trim());
+
         System.out.println("Question found?: " + question);
         if (question.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        questionRepository.deleteQuestionByQuestion(question.get().question());
+        questionRepository.deleteQuestionByQuestion(question.get().question().trim());
+
         System.out.println("Question deleted:" + question);
         return ResponseEntity.ok().build();
     }
@@ -38,7 +40,7 @@ public class QuestionController implements QuestionApi {
             System.out.println("Wrong number of answers choices");
             return ResponseEntity.notFound().build();
         }
-        Question question = questionRepository.insert(new Question(questionDTO.getQuestion(),questionDTO.getAnswerChoices(),questionDTO.getCorrectAnswer()));
+        Question question = questionRepository.insert(new Question(questionDTO.getQuestion().trim(),questionDTO.getAnswerChoices(),questionDTO.getCorrectAnswer()));
         System.out.println("New Question added: " + question);
         return ResponseEntity.ok().build();
     }
