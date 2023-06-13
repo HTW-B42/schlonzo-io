@@ -49,7 +49,6 @@ export default function Game({ state }) {
     loadQuestion();
   }, [loadQuestion]);
 
-
   const handleAnswer = (answer) => {
     setIsLoading(true);
     api
@@ -65,6 +64,7 @@ export default function Game({ state }) {
       });
   };
   
+  
   const handleNextQuestion = () => {
     setAnsweredCorrectly(null);
     loadQuestion();
@@ -73,52 +73,32 @@ export default function Game({ state }) {
     <div>
       {isLoading && <p>Loading...</p>}
       {!isLoading && question && (
-        <div>
-          <h2>{question.question}</h2>
+      <div>
+        <h2>{question.question}</h2>
+        {question.answerChoices.map((answerChoice, index) => (
           <button
-            onClick={() => handleAnswer(question.answer.string)}
+            key={index}
+            onClick={() => handleAnswer(answerChoice)}
             className={
-              answeredCorrectly === question.answer1 ? 'correct' : ''
+              answeredCorrectly === answerChoice ? 'correct' : ''
             }
           >
-            {question.answer1}
+            {answerChoice}
           </button>
-          <button
-            onClick={() => handleAnswer(question.answer2)}
-            className={
-              answeredCorrectly === question.answer2 ? 'correct' : ''
-            }
-          >
-            {question.answer2}
-          </button>
-          <button
-            onClick={() => handleAnswer(question.answer3)}
-            className={
-              answeredCorrectly === question.answer3 ? 'correct' : ''
-            }
-          >
-            {question.answer3}
-          </button>
-          <button
-            onClick={() => handleAnswer(question.answer4)}
-            className={
-              answeredCorrectly === question.answer4 ? 'correct' : ''
-            }
-          >
-            {question.answer4}
-          </button>
-          {answeredCorrectly && (
-            <p className="feedback correct">Correct!</p>
-          )}
-          {answeredCorrectly === false && (
-            <p className="feedback incorrect">Incorrect!</p>
-          )}
-          <p>Score: {score}</p>
-          <button onClick={handleNextQuestion}>Next Question</button>
-        </div>
-      )}
-    </div>
-  );
+        ))}
+        {answeredCorrectly && (
+          <p className="feedback correct">Correct!</p>
+        )}
+        {answeredCorrectly === false && (
+          <p className="feedback incorrect">Incorrect!</p>
+        )}
+        <p>Score: {score}</p>
+        <button onClick={handleNextQuestion}>Next Question</button>
+      </div>
+    )}
+  </div>
+);
+
 
   
 }
