@@ -74,9 +74,9 @@ export default function Game({ state }) {
       {isLoading && <p>Loading...</p>}
       {!isLoading && question && (
         <div>
-          <h2>{question.text}</h2>
+          <h2>{question.question}</h2>
           <button
-            onClick={() => handleAnswer(question.answer1)}
+            onClick={() => handleAnswer(question.answer.string)}
             className={
               answeredCorrectly === question.answer1 ? 'correct' : ''
             }
