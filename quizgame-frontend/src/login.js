@@ -15,10 +15,6 @@ export default function Login({
 
   const navigate = useNavigate()
 
-  if (state.loggedIn) {
-    navigate('/home')
-  }
-
   const [username, setUsername] = useState(state.user ? state.user[USER_NAME] : '');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
