@@ -30,60 +30,6 @@ export default function Login({
 
   const client = useMemo(() => new DefaultApi(), []);
 
-  // useEffect(() => {
-  //   if (isLoggedIn && !gameSession) {
-  //     setIsLoading(true);
-  //     client.startGame(sessionToken)
-  //         .then((session) => {
-  //           setGameSession(session);
-  //           setIsLoading(false);
-  //         })
-  //         .catch((error) => {
-  //           console.error('Error:', error);
-  //           setIsLoading(false);
-  //         });
-  //   }
-  // }, [client, isLoggedIn, gameSession, sessionToken]);
-  //
-  // useEffect(() => {
-  //   if (isLoggedIn && gameSession && !currentQuestion) {
-  //     setIsLoading(true);
-  //     client.getQuestion(sessionToken)
-  //         .then((data) => {
-  //           setCurrentQuestion(data);
-  //           setIsLoading(false);
-  //         })
-  //         .catch((error) => {
-  //           console.error('Error:', error);
-  //           setIsLoading(false);
-  //         });
-  //   }
-  // }, [client, isLoggedIn, gameSession, currentQuestion, sessionToken]);
-
-  // const handleAnswer = (answer) => {
-  //   setIsLoading(true);
-  //   client.answerQuestion(sessionToken, answer === currentQuestion.correctAnswer)
-  //     .then((data) => {
-  //       setGameSession(data);
-  //       setIsAnswered(true);
-  //       setIsCorrect(answer === currentQuestion.correctAnswer);
-  //       setIsLoading(false);
-  //       if (answer === currentQuestion.correctAnswer) {
-  //         setScore(score + 1);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error:', error);
-  //       setIsLoading(false);
-  //     });
-  // };
-  //
-  // const handleNextQuestion = () => {
-  //   setCurrentQuestion(null);
-  //   setIsAnswered(false);
-  //   setIsCorrect(false);
-  // };
-
   const handleLogin = async () => {
     setIsLoading(true)
     const basicAuth = new BasicAuthDTO(btoa(`${username}:${password}`))
@@ -97,23 +43,6 @@ export default function Login({
     onSuccess(authSuccess)
     navigate('/home')
   };
-
-  // const handleLogout = () => {
-  //   setIsLoading(true);
-  //   client.performLogout(sessionToken)
-  //     .then(() => {
-  //       setIsLoggedIn(false);
-  //       setGameSession(null);
-  //       setCurrentQuestion(null);
-  //       setScore(0);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error:', error);
-  //     })
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //     });
-  // };
 
 
   const handleRegister = async () => {

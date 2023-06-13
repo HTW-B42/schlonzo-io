@@ -6,25 +6,7 @@ import Home from "./home";
 import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import {SESSION_TOKEN, USER} from "./constants";
-import * as PropTypes from "prop-types";
-
-
-class Game extends React.Component {
-  render() {
-    return null;
-  }
-}
-
-Game.propTypes = {
-  state: PropTypes.shape({
-    isLoading: PropTypes.bool,
-    loggedIn: PropTypes.bool,
-    sessionToken: PropTypes.string,
-    isDarkMode: PropTypes.bool,
-    user: PropTypes.any,
-    gameSession: PropTypes.any
-  })
-};
+import Game from "./Game";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
