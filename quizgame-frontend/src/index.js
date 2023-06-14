@@ -6,7 +6,7 @@ import Home from "./home";
 import { BrowserRouter as Router, Link, Route, Routes, useNavigate } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import { SESSION_TOKEN, USER } from "./constants";
-import Game from './quiz';
+import Game from './game';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -32,54 +32,49 @@ function App() {
     setUser(user);
     setLoggedIn(true);
   };
-
-  const onGameStartFromHome = function (gameId = state.gameSession) {
-    if (gameId) {
-      // TODO: Join existing game (not implemented yet)
-    } else {
-      setGameSession(gameId);
-      
-      
+  const onGameStartFromHome = function (gameID = state.gameSession ) {
+    if (!state.gameSession) {
+      setGameSession(gameID);
     }
   };
-
   const onGameEnd = function (userScore = null) {
     setGameSession(null);
   };
 
   useEffect(() => {
-       if (loggedIn && !gameSession) {
-         setIsLoading(true);
-        client.startGame(sessionToken)
-             .then((session) => {
-               setGameSession(session);
-               setIsLoading(false);
-             })
-             .catch((error) => {
-               console.error('Error:', error);
-             setIsLoading(false);
-             });
-      }
-     }, [client, loggedIn, gameSession, sessionToken]);
-    
-     useEffect(() => {
-       if (loggedIn && gameSession && !currentQuestion) {
-         setIsLoading(true);
-         client.getQuestion(sessionToken)
-             .then((data) => {
-              setCurrentQuestion(data);
-              setIsLoading(false);
-             })
-             .catch((error) => {
-               console.error('Error:', error);
-               setIsLoading(false);
-             });
-       }
-     }, [client, loggedIn, gameSession, currentQuestion, sessionToken]);
+    if (loggedIn && !gameSession) {
+      setIsLoading(true);
+      client.startGame(sessionToken)
+        .then((session) => {
+          setGameSession(session.gameSession);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          setIsLoading(false);
+        });
+    }
+  }, [client, loggedIn, gameSession, sessionToken]);
 
   useEffect(() => {
+    if (loggedIn && gameSession && !currentQuestion) {
+      setIsLoading(true);
+      client.getQuestion(sessionToken)
+        .then((data) => {
+          setCurrentQuestion(data);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          setIsLoading(false);
+        });
+    }
+  }, [client, loggedIn, gameSession, currentQuestion, sessionToken]);
+
+
+   useEffect(() => {
     onGameStartFromHome();
-  }, []);
+  }, [onGameStartFromHome]);
 
   return (
     <React.StrictMode>
@@ -88,7 +83,7 @@ function App() {
         <Link to={'/home'}>home</Link>
         <Routes>
           <Route path={'/'} element={<Login state={state} onSuccess={onLoginSuccess} />} />
-          <Route path={'/home'} element={<Home state={state} onGameStart={() => onGameStartFromHome()} />} />
+          <Route path={'/home'} element={<Home state={state} onGameStart={onGameStartFromHome} />} />
           <Route path={'/game'} element={<Game state={state} onGameEnd={onGameEnd} />} />
         </Routes>
       </Router>

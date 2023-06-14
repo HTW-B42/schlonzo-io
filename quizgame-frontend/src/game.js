@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { DefaultApi } from 'quizgame-client-api/src';
 import * as PropTypes from "prop-types";
-import './quiz.css';
+import './game.css';
 import {
   SESSION_TOKEN,
   USER_EMAIL,
@@ -73,7 +73,7 @@ export default function Game({ state }) {
 
   return (
     <div className="container">
-      <div className="quiz">
+      <div className="game">
         {isLoading && <p>Loading...</p>}
         {!isLoading && question && (
           <div>
