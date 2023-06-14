@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import {DefaultApi} from 'quizgame-client-api/src';
+import { DefaultApi } from 'quizgame-client-api/src';
 import * as PropTypes from "prop-types";
 import './quiz.css';
 import {
-    SESSION_TOKEN,
-    USER_EMAIL,
-    USER_NAME,
-    IS_LOADING,
-    IS_LOGGED_IN,
-    USER,
-  } from './constants';
-  
+  SESSION_TOKEN,
+  USER_EMAIL,
+  USER_NAME,
+  IS_LOADING,
+  IS_LOGGED_IN,
+  USER,
+} from './constants';
+
 export default function Game({ state }) {
   const [question, setQuestion] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +30,7 @@ export default function Game({ state }) {
 
   const api = useMemo(() => new DefaultApi(), []);
 
-  
+
   const fetchQuestion = useCallback(() => {
     setIsLoading(true);
     api
@@ -63,12 +63,14 @@ export default function Game({ state }) {
         setIsLoading(false);
       });
   };
-  
-  
+
+
   const handleNextQuestion = () => {
     setAnsweredCorrectly(null);
     fetchQuestion();
   };
+
+
   return (
     <div className="container">
       <div className="quiz">
@@ -80,7 +82,7 @@ export default function Game({ state }) {
               <button
                 key={index}
                 onClick={() => handleAnswer(answerChoice)}
-                className={`answer-button ${answeredCorrectly === answerChoice ? (answeredCorrectly ? '.correct' : '.incorrect') : ''}`}
+                className={`answer-button ${answeredCorrectly === answerChoice ? (answeredCorrectly ? 'correct' : 'incorrect') : ''}`}
               >
                 {answerChoice}
               </button>
