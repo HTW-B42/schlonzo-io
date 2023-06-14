@@ -6,7 +6,7 @@ import Home from "./components/Home";
 import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import {SESSION_TOKEN, USER} from "./constants";
-import Game from "./components/Game";
+import Quiz from "./quiz";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -51,7 +51,7 @@ function App() {
           <Routes>
             <Route path={'/'} element={<Login state={state} onSuccess={onLoginSuccess}/>}></Route>
             <Route path={'/home'} element={<Home state={state} onGameStart={onGameStartFromHome}/>}></Route>
-            <Route path={'/game'} element={<Game state={state} onGameEnd={onGameEnd}/>}></Route>
+            <Route path={'/game'} element={<Quiz state={state} onGameEnd={onGameEnd}/>}></Route>
           </Routes>
         </Router>
       </React.StrictMode>
