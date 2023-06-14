@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { AuthSuccessDTO, UserDTO, DefaultApi } from 'quizgame-client-api/src';
+import { AuthSuccessDTO, UserDTO, DefaultApi, GameSessionDTO } from 'quizgame-client-api/src';
 import './index.css';
 import Login from './login';
 import Home from "./home";
@@ -32,49 +32,67 @@ function App() {
     setUser(user);
     setLoggedIn(true);
   };
-  const onGameStartFromHome = function (gameID = state.gameSession ) {
-    if (!state.gameSession) {
-      setGameSession(gameID);
+
+  const onGameStartFromHome =  (gameID = SESSION_TOKEN) => {
+    if (!gameSession) {
+      if (loggedIn && sessionToken) { 
+        setIsLoading(true);
+        client.startGame(sessionToken)
+          .then((response) => {
+            const gameSessionData = GameSessionDTO.constructFromObject(response);
+            setGameSession(gameSessionData);
+            console.log(gameSession);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+            setIsLoading(false);
+          });
+      }
     }
   };
-  const onGameEnd = function (userScore = null) {
+  
+
+  const onGameEnd = (userScore = null) => {
     setGameSession(null);
   };
 
   useEffect(() => {
-    if (loggedIn && !gameSession) {
-      setIsLoading(true);
-      client.startGame(sessionToken)
-        .then((session) => {
-          setGameSession(session.gameSession);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          setIsLoading(false);
-        });
-    }
-  }, [client, loggedIn, gameSession, sessionToken]);
+    console.log(gameSession);
+  }, [gameSession]);
 
-  useEffect(() => {
-    if (loggedIn && gameSession && !currentQuestion) {
-      setIsLoading(true);
-      client.getQuestion(sessionToken)
-        .then((data) => {
-          setCurrentQuestion(data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          setIsLoading(false);
-        });
-    }
-  }, [client, loggedIn, gameSession, currentQuestion, sessionToken]);
+  // useEffect(() => {
+  //   if (loggedIn && !gameSession) {
+  //     setIsLoading(true);
+  //     client.startGame(sessionToken)
+  //       .then((session) => {
+  //         setGameSession(session);
+  //         console.log(gameSession);
+  //         setIsLoading(false);
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error:', error);
+  //         setIsLoading(false);
+  //       });
+  //   }
+  // }, [client, loggedIn, gameSession, sessionToken]);
+
+  // useEffect(() => {
+  //   if (loggedIn && gameSession && !currentQuestion) {
+  //     setIsLoading(true);
+  //     client.getQuestion(sessionToken)
+  //       .then((data) => {
+  //         setCurrentQuestion(data);
+  //         setIsLoading(false);
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error:', error);
+  //         setIsLoading(false);
+  //       });
+  //   }
+  // }, [client, loggedIn, gameSession, currentQuestion, sessionToken]);
 
 
-   useEffect(() => {
-    onGameStartFromHome();
-  }, [onGameStartFromHome]);
 
   return (
     <React.StrictMode>
