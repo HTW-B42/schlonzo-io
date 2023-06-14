@@ -53,11 +53,7 @@ public class QuestionController implements QuestionApi {
             return ResponseEntity.notFound().build();
         }
 
-        QuestionDTO questionDTO = new QuestionDTO(
-                question.get().getQuestion(),
-                question.get().getAnswerChoices(),
-                question.get().getCorrectAnswer()
-        );
+        QuestionDTO questionDTO = question.get().toDTO();
         return ResponseEntity.ok(questionDTO);
     }
 
