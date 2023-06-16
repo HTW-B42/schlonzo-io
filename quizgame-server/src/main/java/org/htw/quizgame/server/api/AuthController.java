@@ -3,7 +3,7 @@ package org.htw.quizgame.server.api;
 import org.htw.quizgame.api.AuthApi;
 import org.htw.quizgame.api.model.AuthSuccessDTO;
 import org.htw.quizgame.api.model.BasicAuthDTO;
-import org.htw.quizgame.server.service.IdentityProvider;
+import org.htw.quizgame.server.IdentityProvider;
 import org.htw.quizgame.server.data.UserRepository;
 import org.htw.quizgame.server.data.UserSessionRepository;
 import org.htw.quizgame.server.model.User;

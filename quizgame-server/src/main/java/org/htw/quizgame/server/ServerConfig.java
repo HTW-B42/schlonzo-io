@@ -1,10 +1,6 @@
-package org.htw.quizgame.server.config;
+package org.htw.quizgame.server;
 
-import org.htw.quizgame.api.model.ApiInfoDTO;
-import org.htw.quizgame.api.model.GameSessionDTO;
-import org.htw.quizgame.api.model.UserDTO;
-import org.htw.quizgame.api.model.UserScoreDTO;
-import org.htw.quizgame.server.model.Question;
+import org.htw.quizgame.api.model.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -50,11 +46,11 @@ public class ServerConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public Question exampleQuestion() {
+  public QuestionDTO exampleQuestion() {
     String question = "Hauptstadt von Deutschland";
     List<String> answerList = List.of("Paris", "Bonn", "Amsterdam", "Berlin");
     String corrAnswer = "Paris";
-    return new Question(question, answerList, corrAnswer);
+    return new QuestionDTO().question(question).answerChoices(answerList).correctAnswer(corrAnswer);
   }
 
   @Bean

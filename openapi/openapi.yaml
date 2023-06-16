@@ -47,24 +47,12 @@ paths:
     post:
       operationId: testUsername
       summary: test if username is available
-      parameters:
-        - $ref: "#/components/parameters/UserName"
-      responses:
-        '200':
-          description: ok
-          content:
-            application/json:
-              schema:
-                type: boolean
-        '500':
-          $ref: "#/components/responses/Error"
-
-  /user/Email/test:
-    post:
-      operationId: testEmail
-      summary: test if email is available
-      parameters:
-        - $ref: "#/components/parameters/UserEmail"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserName"
       responses:
         '200':
           description: ok
@@ -108,39 +96,6 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         '500':
           $ref: "#/components/responses/Error"
-
-  /question/add:
-    post:
-      operationId: uploadQuestion
-      summary: upload a question to the database
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Question"
-      responses:
-        '200':
-          description: question uploaded successfully
-        '500':
-          $ref: "#/components/responses/Error"
-
-  /question/delete:
-    post:
-      operationId: deleteQuestion
-      summary: delete a question from the database
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/QuestionString"
-      responses:
-        '200':
-          description: question deleted successfully
-        '500':
-          $ref: "#/components/responses/Error"
-
 
   /game/start:
     parameters:
@@ -207,20 +162,6 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/SessionToken"
-
-    UserName:
-      in: header
-      name: X-USER-NAME
-      required: true
-      schema:
-        $ref: "#/components/schemas/UserName"
-
-    UserEmail:
-      in: header
-      name: X-USER-EMAIL
-      required: true
-      schema:
-        $ref: "#/components/schemas/UserEmail"
 
   responses:
     Error:
@@ -300,13 +241,6 @@ components:
       description: the users login and user name
       pattern: '^(?=.{8,22}$)(?![_])(?!.*[_]{2})[a-zA-Z0-9_]+(?<![_])$'
       example: "Real_Friedrich_Schmerz"
-
-    UserEmail:
-      type: string
-      description: the users email
-      pattern: '^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'
-      example: "test123@google.com"
-
 
     RegisterUser:
       type: object
@@ -409,7 +343,3 @@ components:
             type: string
         correctAnswer:
           type: string
-
-    QuestionString:
-      type: string
-      description: question

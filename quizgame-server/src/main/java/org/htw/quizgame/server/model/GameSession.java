@@ -1,105 +1,81 @@
 package org.htw.quizgame.server.model;
 
-
-import lombok.Getter;
-import org.htw.quizgame.api.model.GameSessionDTO;
-import org.htw.quizgame.server.model.util.ConvertsTo;
-import org.htw.quizgame.server.model.util.SaveAs;
-import org.springframework.data.annotation.Id;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.Map.Entry;
+import lombok.Data;
+import org.htw.quizgame.api.model.GameSessionDTO;
+import org.htw.quizgame.api.model.UserScoreDTO;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-public class GameSession implements SaveAs<GameResult>, ConvertsTo<GameSessionDTO> {
+@Data
+@Document
+public class GameSession {
 
-  private static final Collector<UserScore, ?, Map<User, Boolean>> TO_ANSWERS_MAP =
-      Collectors.toMap(UserScore::getUser, ignored -> false);
-  private static final Collector<UserScore, ?, Map<User, BigDecimal>> TO_SCORE_MAP =
-      Collectors.toMap(UserScore::getUser, UserScore::getScore);
-  private final List<UserSession> lobbyMembers = new ArrayList<>();
-  private final List<UserScore> scoreboard = new ArrayList<>();
-  private final LinkedHashMap<Question, Map<User, Boolean>> questions = new LinkedHashMap<>();
-  private Question question;
-  private Map<User, Boolean> answers;
   @Id
   private String gameID;
+
+  private List<User> lobbyMembers = new ArrayList<>();
+
+  private Map<User, BigDecimal> scoreboard = new HashMap<>();
+
   private Boolean gameOver = false;
 
-  private Optional<UserScore> getScoreFor(User user) {
-    return scoreboard.stream()
-        .filter(s -> s.getUserSession().getUser().getUserName().equals(user.getUserName()))
-        .findFirst();
+  public GameSession(List<User> initialMembers) {
+    super();
+    initialMembers.forEach(this::initializeMember);
   }
 
-  public void addMember(UserSession userSession) {
+  public void addScore(User user, BigDecimal score) {
     if (gameOver) {
       return;
     }
-    initializeMember(userSession);
+    BigDecimal newScore = scoreboard.get(user).add(score);
+    scoreboard.put(user, newScore);
   }
 
-  public void removeMember(UserSession userSession) {
+  public void addMember(User user) {
     if (gameOver) {
       return;
     }
-    lobbyMembers.remove(userSession);
+    initializeMember(user);
   }
 
-  public GameSession answerQuestion(User user, boolean correct) {
-    answers.put(user, correct);
-    return this;
-  }
-
-  public GameSession nextQuestion(Question question) {
-    if (this.question != null) {
-      questions.put(this.question, this.answers);
+  public void removeMember(User user) {
+    if (gameOver) {
+      return;
     }
-    if (question == null) {
-      // TODO end game from service
-      end();
-      return this;
-    }
-    this.question = question;
-    this.answers = new HashMap<>(scoreboard.stream().collect(TO_ANSWERS_MAP));
-    questions.put(question, null);
-    return this;
+    lobbyMembers.remove(user);
+    // TODO export score to user scoreboard?
+    scoreboard.remove(user);
   }
 
-  private void end() {
+  public void end() {
     gameOver = true;
-    // TODO export scores
   }
 
-  @Override
   public GameSessionDTO toDTO() {
     return new GameSessionDTO()
         .gameID(gameID)
-        .lobbyMembers(lobbyMembers.stream()
-            .map(UserSession::getUser)
-            .map(User::toDTO)
-            .toList())
-        .scoreboard(scoreboard.stream()
-            .map(UserScore::toDTO)
-            .toList())
+        .lobbyMembers(lobbyMembers.stream().map(User::toDTO).toList())
+        .scoreboard(scoreboard.entrySet().stream().map(GameSession::toUserScoreDTO).toList())
         .gameOver(gameOver);
   }
 
-  @Override
-  public GameResult toEntity() {
-    return new GameResult(scoreboard.stream().collect(TO_SCORE_MAP), questions);
+  private void initializeMember(User user) {
+    lobbyMembers.add(user);
+    scoreboard.put(user, BigDecimal.valueOf(0));
   }
 
-  private void initializeMember(UserSession userSession) {
-    lobbyMembers.add(userSession);
-    scoreboard.add(userSession.getUserScore());
+  private static UserScoreDTO toUserScoreDTO(Entry<User, BigDecimal> userScore) {
+    return new UserScoreDTO()
+        .userName(userScore.getKey().getUserName())
+        .userScore(userScore.getValue());
   }
+
 }
 
