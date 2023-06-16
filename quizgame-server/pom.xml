@@ -59,6 +59,7 @@
       <artifactId>api</artifactId>
       <version>${quizgame.api.version}</version>
     </dependency>
+
   </dependencies>
 
   <build>

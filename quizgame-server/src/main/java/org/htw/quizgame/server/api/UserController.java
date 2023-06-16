@@ -3,8 +3,8 @@ package org.htw.quizgame.server.api;
 import org.htw.quizgame.api.UserApi;
 import org.htw.quizgame.api.model.RegisterUserDTO;
 import org.htw.quizgame.api.model.UserDTO;
-import org.htw.quizgame.server.IdentityProvider;
-import org.htw.quizgame.server.data.GameSessionRepository;
+import org.htw.quizgame.server.service.IdentityProvider;
+import org.htw.quizgame.server.data.GameResultRepository;
 import org.htw.quizgame.server.data.UserRepository;
 import org.htw.quizgame.server.model.User;
 import org.htw.quizgame.server.model.UserSession;
@@ -18,13 +18,13 @@ import java.util.Optional;
 public class UserController implements UserApi {
 
   private final UserRepository userRepository;
-  private final GameSessionRepository gameSessionRepository;
+  private final GameResultRepository gameSessionRepository;
   private final IdentityProvider identityProvider;
 
   @Autowired
   public UserController(
       UserRepository userRepository,
-      GameSessionRepository gameSessionRepository,
+      GameResultRepository gameSessionRepository,
       IdentityProvider identityProvider) {
     this.userRepository = userRepository;
     this.gameSessionRepository = gameSessionRepository;
@@ -49,8 +49,17 @@ public class UserController implements UserApi {
 
   @Override
   public ResponseEntity<UserDTO> registerUser(RegisterUserDTO registerUserDTO) {
+    if(userRepository.existsUserByUserEmail(registerUserDTO.getUserEmail()) && userRepository.existsUserByUserName(registerUserDTO.getUserName())){
+      return ResponseEntity.notFound().build();
+    }
     User newUser = userRepository.insert(new User(registerUserDTO));
-    System.out.println("neuer user angelegt: \n" + newUser.toDTO().toString());
+    System.out.println("New user created: \n" + newUser.toDTO().toString());
     return ResponseEntity.ok(newUser.toDTO());
+  }
+
+  @Override
+  public ResponseEntity<Boolean> testEmail(String mail) {
+    Boolean emailAvailable = !userRepository.existsUserByUserEmail(mail);
+    return ResponseEntity.ok(emailAvailable);
   }
 }
