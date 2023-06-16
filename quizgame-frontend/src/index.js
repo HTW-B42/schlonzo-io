@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {AuthSuccessDTO, UserDTO} from 'quizgame-client-api/src';
 import './index.css';
-import Login from './login';
+import Quiz from "./components/Quiz";
 import Home from "./components/Home";
+import Login from "./components/Login";
 import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import {SESSION_TOKEN, USER} from "./constants";
-import Quiz from "./quiz";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -41,7 +41,7 @@ function App() {
   };
 
   const onGameEnd = function (userScore = null) {
-
+    setGameSession(null);
   };
 
   return (

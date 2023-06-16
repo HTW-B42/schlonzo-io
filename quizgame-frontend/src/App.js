@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {BasicAuthDTO, DefaultApi,} from 'quizgame-client-api/src';
 import './App.css';
-import Home from "./components/Home";
 
 const difficultyLevels = ['Easy', 'Medium', 'Hard'];
 const categories = ['Sports', 'History', 'Science'];

@@ -1,0 +1,136 @@
+.quiz {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.question {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.answer-button {
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 15px;
+    font-size: 20px;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.answer-button:hover {
+    background-color: #f2f2f2;
+}
+
+.correct {
+    background-color: #6ac259;
+}
+
+.incorrect {
+    background-color: #ff5c5c;
+}
+
+.feedback {
+    margin-top: 20px;
+    font-size: 18px;
+    font-style: italic;
+}
+
+.score {
+    margin-top: 30px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+button {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #eef2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.help-container {
+    position: relative;
+    display: inline-block;
+    margin: 20px 0; /* Optional, adjust as needed */
+}
+
+.help-icon {
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+}
+
+.help-icon {
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+}
+
+.help-tooltip {
+    visibility: hidden;
+    width: 300px; /* Adjust the width as needed */
+    max-width: 80%; /* Optional, limits the width based on the container */
+    background-color: #f9f9f9;
+    color: #333;
+    text-align: center;
+    border-radius: 8px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    top: -150%; /* Position the tooltip above the icon */
+    left: 50%;
+    transform: translateX(-50%); /* Center tooltip horizontally */
+    margin-top: -10px; /* Adjust the spacing between the tooltip and icon */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.help-tooltip h4 {
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.help-tooltip p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1.5; /* Adjust line height for readability */
+}
+
+.help-tooltip ul {
+    margin-bottom: 10px;
+}
+
+.help-tooltip li {
+    font-size: 16px;
+}
+
+.help-container:hover .help-tooltip {
+    visibility: visible;
+    opacity: 1;
+    top: 100%; /* Position the tooltip below the icon */
+    margin-top: 10px;
+}
+
+

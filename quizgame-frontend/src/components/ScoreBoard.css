@@ -1,4 +1,4 @@
-.quiz {
+.scoreboard {
     max-width: 600px;
     margin: 0 auto;
     padding: 40px;
@@ -8,13 +8,13 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.question {
-    font-size: 24px;
+.scoreboard h2 {
+    font-size: 32px;
     font-weight: bold;
     margin-bottom: 30px;
 }
 
-.answer-button {
+.scoreboard button {
     display: block;
     width: 100%;
     margin-bottom: 20px;
@@ -28,32 +28,8 @@
     transition: background-color 0.3s;
 }
 
-.answer-button:hover {
+.scoreboard button:hover {
     background-color: #f2f2f2;
-}
-
-.correct {
-    background-color: #6ac259;
-}
-
-.incorrect {
-    background-color: #ff5c5c;
-}
-
-.feedback {
-    margin-top: 20px;
-    font-size: 18px;
-    font-style: italic;
-}
-
-.score {
-    margin-top: 30px;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-button {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {

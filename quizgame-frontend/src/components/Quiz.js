@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { DefaultApi } from 'quizgame-client-api/src';
 import * as PropTypes from "prop-types";
-import './quiz.css';
+import './Quiz.css';
+import ScoreBoard from './ScoreBoard';
 import {
     SESSION_TOKEN,
     USER_EMAIL,
@@ -9,13 +10,16 @@ import {
     IS_LOADING,
     IS_LOGGED_IN,
     USER,
-} from './constants';
+} from '../constants';
 
-export default function Quiz({ state }) {
+export default function Quiz({ state, onGameEnd }) {
     const [question, setQuestion] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [gameOver, setGameOver] = useState(false);
     const [answeredCorrectly, setAnsweredCorrectly] = useState(null);
     const [score, setScore] = useState(0);
+    const [helpContent, setHelpContent] = useState('');
+    const [showHelp, setShowHelp] = useState(false);
 
     Quiz.propTypes = {
         state: PropTypes.shape({
@@ -70,10 +74,50 @@ export default function Quiz({ state }) {
         fetchQuestion();
     };
 
+    const handleGameOver = () => {
+        setGameOver(true);
+    }
+
+    const handlePlayAgain = () => {
+        setGameOver(false);
+        setScore(0);
+        fetchQuestion();
+    }
+
+    const toggleHelp = () => {
+        setShowHelp(!showHelp);
+        if (!showHelp) {
+          setHelpContent('This is the help menu. You can find information about the game rules and other tips here.');
+        } else {
+          setHelpContent('');
+        }
+    };
+     
+    if (gameOver) {
+        return <ScoreBoard score={score} onGameEnd={onGameEnd} onPlayAgain={handlePlayAgain} />;
+    }
 
     return (
         <div className="container">
             <div className="quiz">
+            <div className="help-container">
+                <span className="help-icon" onClick={toggleHelp}>
+                  ?
+                </span>
+                {showHelp && (
+                  <div className="help-tooltip">
+                    <h4>Game Rules</h4>
+                    <p>Here are the game rules:</p>
+                    <ul>
+                      <li>Answer the questions correctly to earn points.</li>
+                      <li>The difficulty level determines the complexity of the questions.</li>
+                      <li>Select a category to narrow down the question topics.</li>
+                      <li>You can view your score and progress on the screen.</li>
+                    </ul>
+                    <p>Enjoy the game and have fun!</p>
+                  </div>
+                )}
+              </div>
                 {isLoading && <p>Loading...</p>}
                 {!isLoading && question && (
                     <div>

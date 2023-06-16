@@ -1,8 +1,8 @@
 import React, {useMemo, useState} from 'react';
 import {BasicAuthDTO, DefaultApi,} from 'quizgame-client-api/src';
-import './App.css';
+import './Login.css';
 import {useNavigate} from "react-router-dom";
-import {USER_NAME} from "./constants";
+import {USER_NAME} from "../constants";
 
 const difficultyLevels = ['Easy', 'Medium', 'Hard'];
 const categories = ['Sports', 'History', 'Science'];
@@ -14,10 +14,6 @@ export default function Login({
                               }) {
 
   const navigate = useNavigate()
-
-  // if (state.loggedIn) {
-  //   navigate('/home')
-  // }
 
   const [username, setUsername] = useState(state.user ? state.user[USER_NAME] : '');
   const [password, setPassword] = useState('');
