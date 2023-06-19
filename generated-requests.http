@@ -1,0 +1,74 @@
+###
+GET http://localhost:4711/info
+
+###
+POST http://localhost:4711/user/register
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user_name": "jakob",
+  "user_email": "test",
+  "hashed_password": "passwort"
+}
+
+###
+POST http://localhost:4711/auth
+Accept: application/json
+Content-Type: application/json
+
+{
+  "auth_string": "amFrb2I6cGFzc3dvcnQ="
+}
+
+
+###
+GET http://localhost:4711/game/start
+Accept: application/json
+Content-Type: application/json
+X-SESSION-TOKEN: e60e520a-3bb2-43ab-b804-aefdba3fddca
+
+
+
+###
+GET http://localhost:4711/game/question
+Accept: application/json
+Content-Type: application/json
+X-SESSION-TOKEN: 241b97c0-f256-4474-ba4d-55405608b52b
+
+
+
+###
+POST http://localhost:4711/game/question?user_answered_correctly=true
+Accept: application/json
+Content-Type: application/json
+X-SESSION-TOKEN: 241b97c0-f256-4474-ba4d-55405608b52b
+
+
+
+### QUESTION ADMINISTRATION
+
+###
+POST http://localhost:4711/question/add
+Accept: application/json
+Content-Type: application/json
+
+{
+  "question": "string",
+  "answerChoices": [
+    "pling",
+    "plong",
+    "dingens",
+    "dingenskirchen"
+  ],
+  "correctAnswer": "dingens"
+}
+
+
+
+###
+DELETE http://localhost:4711/question/delete?question_id=6490714d4029fb2121662dd6
+Accept: application/json
+Content-Type: application/json
+
+
