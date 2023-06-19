@@ -110,8 +110,6 @@ export default function Quiz({ state, onGameEnd }) {
                     <p>Here are the game rules:</p>
                     <ul>
                       <li>Answer the questions correctly to earn points.</li>
-                      <li>The difficulty level determines the complexity of the questions.</li>
-                      <li>Select a category to narrow down the question topics.</li>
                       <li>You can view your score and progress on the screen.</li>
                     </ul>
                     <p>Enjoy the game and have fun!</p>
