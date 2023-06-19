@@ -8,8 +8,9 @@ import java.util.Optional;
 
 public interface QuestionRepository extends MongoRepository<Question, String> {
     @Query("{ 'question' : { $regex: ?0, $options: 'i' } }")
-    Optional<Question> findQuestionByQuestion(String s);
+    Optional<Question> findByQuestion(String question);
+
 
     @Query("{ 'question' : { $regex: ?0, $options: 'i' } }")
-    void deleteQuestionByQuestion(String s);
+    void deleteByQuestion(String question);
 }

@@ -49,7 +49,7 @@ public class UserController implements UserApi {
 
   @Override
   public ResponseEntity<UserDTO> registerUser(RegisterUserDTO registerUserDTO) {
-    if(userRepository.existsUserByUserEmail(registerUserDTO.getUserEmail()) && userRepository.existsUserByUserName(registerUserDTO.getUserName())){
+    if(userRepository.existsUserByUserEmail(registerUserDTO.getUserEmail()) || userRepository.existsUserByUserName(registerUserDTO.getUserName())){
       return ResponseEntity.notFound().build();
     }
     User newUser = userRepository.insert(new User(registerUserDTO));
