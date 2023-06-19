@@ -127,14 +127,10 @@ paths:
 
   /question/delete:
     delete:
+      parameters:
+        - $ref: "#/components/parameters/QuestionId"
       operationId: deleteQuestion
       summary: delete a question from the database
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/QuestionString"
       responses:
         '200':
           description: question deleted successfully
@@ -221,6 +217,14 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/UserEmail"
+
+    QuestionId:
+      in: query
+      name: question_id
+      required: true
+      schema:
+        type: string
+      description: question
 
   responses:
     Error:
@@ -313,7 +317,7 @@ components:
       required:
         - user_name
         - user_email
-        - hashed-password
+        - hashed_password
       properties:
         user_name:
           description: the users login and user name
@@ -326,7 +330,7 @@ components:
           pattern: '^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'
           format: email
           example: "RealFriedrichSchmerz@cdu.biz"
-        hashed-password:
+        hashed_password:
           description: hashed user password
           type: string
           format: base64
@@ -409,7 +413,3 @@ components:
             type: string
         correctAnswer:
           type: string
-
-    QuestionString:
-      type: string
-      description: question

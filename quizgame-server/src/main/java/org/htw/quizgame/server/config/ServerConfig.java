@@ -1,19 +1,17 @@
 package org.htw.quizgame.server.config;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
 import org.htw.quizgame.api.model.ApiInfoDTO;
 import org.htw.quizgame.api.model.GameSessionDTO;
 import org.htw.quizgame.api.model.UserDTO;
 import org.htw.quizgame.api.model.UserScoreDTO;
-import org.htw.quizgame.server.model.Question;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
 
 @Configuration
 @EnableWebMvc
@@ -47,14 +45,6 @@ public class ServerConfig implements WebMvcConfigurer {
         .gameOver(false)
         .lobbyMembers(lobbyMembers)
         .scoreboard(scoreboard);
-  }
-
-  @Bean
-  public Question exampleQuestion() {
-    String question = "Hauptstadt von Deutschland";
-    List<String> answerList = List.of("Paris", "Bonn", "Amsterdam", "Berlin");
-    String corrAnswer = "Paris";
-    return new Question(question, answerList, corrAnswer);
   }
 
   @Bean
