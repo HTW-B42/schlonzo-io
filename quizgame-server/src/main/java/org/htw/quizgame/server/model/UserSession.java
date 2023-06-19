@@ -44,12 +44,12 @@ public class UserSession implements ConvertsTo<AuthSuccessDTO> {
   }
 
   public UserSession answerQuestion(boolean correct) {
-    if (gameSession == null || userScore == null || gameSession.getGameOver()) {
-      throw new RuntimeException("no question to answer...");
-    } else {
-      gameSession.answerQuestion(user, correct);
+//    if (gameSession == null || userScore == null || gameSession.getGameOver()) {
+//      throw new RuntimeException("no question to answer...");
+//    } else {
+//      gameSession.answerQuestion(user, correct);
       userScore.addScore(BigDecimal.valueOf(correct ? 10 : -5));
-    }
+//    }
     return this;
   }
 

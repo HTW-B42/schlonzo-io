@@ -19,7 +19,7 @@ public class User implements ConvertsTo<UserDTO>, SaveAs<User> {
   @Id
   private String userName;
 
-  private Boolean userConfirmed = false;
+  private Boolean userConfirmed;
 
   private String userEmail;
 
@@ -30,6 +30,7 @@ public class User implements ConvertsTo<UserDTO>, SaveAs<User> {
     userName = registerUserDTO.getUserName();
     userEmail = registerUserDTO.getUserEmail();
     hashedPassword = registerUserDTO.getHashedPassword();
+    System.out.println("New User added: " + userName + " " + userEmail + " " + hashedPassword);
     userConfirmed = false;
   }
 
