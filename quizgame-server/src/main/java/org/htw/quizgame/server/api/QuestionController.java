@@ -21,14 +21,14 @@ public class QuestionController implements QuestionApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteQuestion(String s) {
-        Optional<Question> question = questionRepository.findQuestionByQuestion(s.trim());
+    public ResponseEntity<Void> deleteQuestion(String question) {
+        Optional<Question> q = questionRepository.findByQuestion(question.trim());
 
-        System.out.println("Question found?: " + question);
-        if (question.isEmpty()) {
+        System.out.println("Question found?: " + q);
+        if (q.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        questionRepository.deleteQuestionByQuestion(question.get().question().trim());
+        questionRepository.deleteByQuestion(q.get().question().trim());
 
         System.out.println("Question deleted:" + question);
         return ResponseEntity.ok().build();

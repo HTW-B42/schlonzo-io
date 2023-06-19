@@ -126,7 +126,7 @@ paths:
           $ref: "#/components/responses/Error"
 
   /question/delete:
-    post:
+    delete:
       operationId: deleteQuestion
       summary: delete a question from the database
       requestBody:
