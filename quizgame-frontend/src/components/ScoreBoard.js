@@ -2,15 +2,17 @@ import React from 'react';
 import {useNavigate} from "react-router-dom";
 import './ScoreBoard.css';
 
-const ScoreBoard = ({ score, onGameEnd, onPlayAgain }) => {
+const ScoreBoard = ({ score, onGameEnd, onPlayAgain, handleGameOver }) => {
   const navigate = useNavigate();
 
   const handleQuit = () => {
+    handleGameOver();
     onGameEnd();
     navigate('/home');
   }
 
   const handlePlayAgain = () => {
+    handleGameOver();
     onPlayAgain();
   }
 

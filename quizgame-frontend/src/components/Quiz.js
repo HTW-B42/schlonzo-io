@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { DefaultApi } from 'quizgame-client-api/src';
+import { DefaultApi, UserScoreDTO } from 'quizgame-client-api/src';
 import * as PropTypes from "prop-types";
 import './Quiz.css';
 import ScoreBoard from './ScoreBoard';
@@ -17,7 +17,7 @@ export default function Quiz({ state, onGameEnd }) {
     const [isLoading, setIsLoading] = useState(false);
     const [gameOver, setGameOver] = useState(false);
     const [answeredCorrectly, setAnsweredCorrectly] = useState(null);
-    const [score, setScore] = useState(0);
+    const [score, setScore] = useState(null);
     const [helpContent, setHelpContent] = useState('');
     const [showHelp, setShowHelp] = useState(false);
 
@@ -29,7 +29,9 @@ export default function Quiz({ state, onGameEnd }) {
             isDarkMode: PropTypes.bool,
             user: PropTypes.any,
             gameSession: PropTypes.any
-        })
+        }),
+        onGameEnd: PropTypes.func.isRequired,
+        userScore: PropTypes.instanceOf(UserScoreDTO),
     };
 
     const api = useMemo(() => new DefaultApi(), []);
@@ -75,8 +77,12 @@ export default function Quiz({ state, onGameEnd }) {
     };
 
     const handleGameOver = () => {
+        const userScore = new UserScoreDTO(state.user[USER_NAME], score);
+        // Call the onGameEnd callback and pass the userScore object
+        onGameEnd(userScore);
         setGameOver(true);
-    }
+    };
+    
 
     const handlePlayAgain = () => {
         setGameOver(false);
@@ -94,7 +100,7 @@ export default function Quiz({ state, onGameEnd }) {
     };
      
     if (gameOver) {
-        return <ScoreBoard score={score} onGameEnd={onGameEnd} onPlayAgain={handlePlayAgain} />;
+        return <ScoreBoard userScore={score} onGameEnd={onGameEnd} onPlayAgain={handlePlayAgain} handleGameOver={handleGameOver} />;
     }
 
     return (
