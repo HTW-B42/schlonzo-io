@@ -130,7 +130,7 @@ export default function Quiz({ state, onGameEnd }) {
                             <button
                                 key={index}
                                 onClick={() => handleAnswer(answerChoice)}
-                                className={`answer-button ${answeredCorrectly === answerChoice ? (answeredCorrectly ? 'correct' : 'incorrect') : ''}`}
+                                className={`answer-button ${answeredCorrectly === answerChoice ? 'correct' : 'incorrect'}`}
                             >
                                 {answerChoice}
                             </button>

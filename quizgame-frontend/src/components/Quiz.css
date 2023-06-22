@@ -32,11 +32,12 @@
     background-color: #f2f2f2;
 }
 
-.correct {
+button.correct {
     background-color: #6ac259;
+    animation: celebrate 0.5s infinite;
 }
 
-.incorrect {
+button.incorrect {
     background-color: #ff5c5c;
 }
 
