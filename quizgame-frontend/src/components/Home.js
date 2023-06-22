@@ -12,7 +12,16 @@ const Home = (props) => {
 		await client.startGame(state.sessionToken).then(res => props.onGameStart(res))
 		navigate('/game')
 	};
-	
+
+	const LogoutButton = () => {
+		const handleLogout = () => {
+			state.setUser = null;
+			state.setLoggedIn = false;
+			state.setSessionToke = null;
+			console.log('Logged out');
+			navigate('/')
+		};
+	}
 	let user, error;
 
 	if (state.loggedIn && state.user) {
@@ -28,6 +37,7 @@ const Home = (props) => {
 		return (
 			<div>
 				<div className={`start-screen`}>
+					<button className="logout-button" onClick={handleLogout}>Logout</button>
 					<h1 className="headline">Shlonzo.io</h1>
 					<button className="button" onClick={() => handleGameStart(state.sessionToken)}>Lets GOOOOOO!!!</button>
 					<p className={"username"}>You are logged in as: {user.user_name}</p>
@@ -37,3 +47,4 @@ const Home = (props) => {
 	}
 };
 export default Home;
+

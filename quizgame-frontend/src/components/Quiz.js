@@ -20,6 +20,7 @@ export default function Quiz({ state, onGameEnd }) {
     const [score, setScore] = useState(null);
     const [helpContent, setHelpContent] = useState('');
     const [showHelp, setShowHelp] = useState(false);
+    let ofTen = 1;
 
     Quiz.propTypes = {
         state: PropTypes.shape({
@@ -74,6 +75,7 @@ export default function Quiz({ state, onGameEnd }) {
     const handleNextQuestion = () => {
         setAnsweredCorrectly(null);
         fetchQuestion();
+        ofTen++;
     };
 
     const handleGameOver = () => {
@@ -87,6 +89,7 @@ export default function Quiz({ state, onGameEnd }) {
     const handlePlayAgain = () => {
         setGameOver(false);
         setScore(0);
+        ofTen = 1;
         fetchQuestion();
     }
 
@@ -141,6 +144,7 @@ export default function Quiz({ state, onGameEnd }) {
                         )}
                         <p className="score">Score: {score}</p>
                         <button onClick={handleNextQuestion}>Next Question</button>
+                        <h3 className="zaehler">Frage {ofTen}/10</h3>
                     </div>
                 )}
             </div>
