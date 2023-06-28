@@ -13,13 +13,14 @@ const Home = (props) => {
 		navigate('/game')
 	};
 
+	
 	const handleLogout = () => {
-		state.setUser(null);
-		state.setLoggedIn(false);
-		state.setSessionToken(null);
-		console.log('Logged out');
-		navigate('/')
-	};
+			state.setUser = null;
+			state.setLoggedIn = false;
+			state.setSessionToke = null;
+			console.log('Logged out');
+			navigate('/')
+		};
 	
 	let user, error;
 
