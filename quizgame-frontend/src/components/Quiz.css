@@ -43,12 +43,12 @@ button.incorrect {
 
 .zaehler {
     font-weight: bold;
-    color: white;
-    text-shadow:
-            -1px -1px 0 #000,
-            1px -1px 0 #000,
-            -1px 1px 0 #000,
-            1px 1px 0 #000;
+    color: black;
+    /* text-shadow:
+            -1px -1px 0 #4b4b4b,
+            1px -1px 0 #4b4b4b,
+            -1px 1px 0 #4b4b4b,
+            1px 1px 0 #4b4b4b; */
 }
 
 .feedback {

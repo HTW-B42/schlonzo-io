@@ -17,6 +17,7 @@ export default function Quiz({ state, onGameEnd }) {
     const [isLoading, setIsLoading] = useState(false);
     const [gameOver, setGameOver] = useState(false);
     const [answeredCorrectly, setAnsweredCorrectly] = useState(null);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [score, setScore] = useState(null);
     const [helpContent, setHelpContent] = useState('');
     const [showHelp, setShowHelp] = useState(false);
@@ -58,6 +59,7 @@ export default function Quiz({ state, onGameEnd }) {
 
     const handleAnswer = (answer) => {
         setIsLoading(true);
+        setSelectedAnswer(answer);
         api
             .answerQuestion(state.sessionToken, answer === question.correctAnswer)
             .then(() => {
@@ -74,6 +76,7 @@ export default function Quiz({ state, onGameEnd }) {
 
     const handleNextQuestion = () => {
         setAnsweredCorrectly(null);
+        setSelectedAnswer(null);
         fetchQuestion();
         ofTen++;
     };
@@ -133,7 +136,7 @@ export default function Quiz({ state, onGameEnd }) {
                             <button
                                 key={index}
                                 onClick={() => handleAnswer(answerChoice)}
-                                className={`answer-button ${answeredCorrectly === answerChoice ? 'correct' : 'incorrect'}`}
+                                className={`answer-button ${selectedAnswer === answerChoice ? (answeredCorrectly ? 'correct' : 'incorrect') : ''}`}
                             >
                                 {answerChoice}
                             </button>
