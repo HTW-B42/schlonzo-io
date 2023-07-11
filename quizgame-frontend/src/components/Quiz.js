@@ -119,10 +119,9 @@ export default function Quiz({ state, onGameEnd }) {
                 {showHelp && (
                   <div className="help-tooltip">
                     <h4>Game Rules</h4>
-                    <p>Here are the game rules:</p>
                     <ul>
-                      <li>Answer the questions correctly to earn points.</li>
-                      <li>You can view your score and progress on the screen.</li>
+                    <li>Answer the questions correctly to earn points.</li>
+                    <li>You can view your score and progress on the screen.</li>
                     </ul>
                     <p>Enjoy the game and have fun!</p>
                   </div>

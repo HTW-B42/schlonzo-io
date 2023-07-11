@@ -9,8 +9,6 @@ const categories = ['Sports', 'History', 'Science'];
 
 export default function Login({
                                 state, onSuccess
-                                // loggedIn = false,
-                                // user = null
                               }) {
 
   const navigate = useNavigate()
