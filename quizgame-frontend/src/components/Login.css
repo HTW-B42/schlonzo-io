@@ -1,0 +1,76 @@
+.App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #eef2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dark-mode {
+    background-color: #333;
+    color: #fff;
+}
+
+.auth-container {
+    max-width: 400px;
+    width: 90%;
+    padding: 40px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.auth-form input {
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 15px;
+    font-size: 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form input.error {
+    border-color: #ff5c5c;
+    box-shadow: 0 2px 4px rgba(255, 92, 92, 0.4);
+}
+
+.auth-form button {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    font-size: 20px;
+    background-color: #4f74fe;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-form button:hover {
+    background-color: #4055db;
+}
+
+.error-message {
+    color: #ff5c5c;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.auth-form p {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #666;
+}
+
+.auth-form a {
+    color: #4f74fe;
+    cursor: pointer;
+}

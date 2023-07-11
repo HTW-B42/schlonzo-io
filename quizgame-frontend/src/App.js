@@ -174,6 +174,7 @@ function App() {
   };
 
   return (
+
     <div className={`App ${isDarkMode ? 'dark-mode' : ''}`}>
       <div className="auth-container">
         {!isLoggedIn ? (
